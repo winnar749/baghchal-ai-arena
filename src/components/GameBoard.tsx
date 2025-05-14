@@ -57,40 +57,13 @@ const GameBoard: React.FC<GameBoardProps> = ({
     return validMoves.some(move => move.row === position.row && move.col === position.col);
   };
 
-  // Generate checkerboard pattern cells
-  const cells = useMemo(() => {
-    const cellsArray = [];
-    for (let row = 0; row < 4; row++) {
-      for (let col = 0; col < 4; col++) {
-        const isDark = (row + col) % 2 === 1;
-        cellsArray.push({
-          row,
-          col,
-          isDark
-        });
-      }
-    }
-    return cellsArray;
-  }, []);
-  
   return (
     <div 
       className="relative mx-auto bg-game-board rounded-lg shadow-xl border border-game-line/30 overflow-hidden"
       style={{ width: boardSize, height: boardSize }}
     >
-      {/* Checkerboard pattern */}
-      {cells.map(({ row, col, isDark }) => (
-        <div 
-          key={`cell-${row}-${col}`}
-          className={`absolute game-cell ${isDark ? 'game-cell-dark' : 'game-cell-light'}`}
-          style={{
-            top: row * cellSize,
-            left: col * cellSize,
-            width: cellSize,
-            height: cellSize,
-          }}
-        />
-      ))}
+      {/* Background */}
+      <div className="absolute inset-0 bg-game-board"></div>
       
       {/* Horizontal lines */}
       {[0, 1, 2, 3, 4].map(row => (
@@ -171,23 +144,6 @@ const GameBoard: React.FC<GameBoardProps> = ({
           </div>
         );
       })}
-      
-      {/* Board coordinates (chess-like) */}
-      <div className="absolute bottom-1 left-0 w-full flex justify-around text-xs text-gray-600 font-medium">
-        <div style={{ width: cellSize, textAlign: 'center' }}>A</div>
-        <div style={{ width: cellSize, textAlign: 'center' }}>B</div>
-        <div style={{ width: cellSize, textAlign: 'center' }}>C</div>
-        <div style={{ width: cellSize, textAlign: 'center' }}>D</div>
-        <div style={{ width: cellSize, textAlign: 'center' }}>E</div>
-      </div>
-      
-      <div className="absolute right-1 top-0 h-full flex flex-col justify-around text-xs text-gray-600 font-medium">
-        <div style={{ height: cellSize, lineHeight: `${cellSize}px` }}>1</div>
-        <div style={{ height: cellSize, lineHeight: `${cellSize}px` }}>2</div>
-        <div style={{ height: cellSize, lineHeight: `${cellSize}px` }}>3</div>
-        <div style={{ height: cellSize, lineHeight: `${cellSize}px` }}>4</div>
-        <div style={{ height: cellSize, lineHeight: `${cellSize}px` }}>5</div>
-      </div>
     </div>
   );
 };
