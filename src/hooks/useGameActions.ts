@@ -1,7 +1,7 @@
 
 import { useState, useCallback } from 'react';
 import { GameState, Position } from '../types/game';
-import { getValidMoves } from '../utils/gameBoard';
+import { getValidMoves, TOTAL_GOATS } from '../utils/gameBoard';
 import { getCaptureMoves, checkWinner } from '../utils/gameRules';
 
 export function useGameActions(gameState: GameState, setGameState: React.Dispatch<React.SetStateAction<GameState>>) {
