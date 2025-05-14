@@ -207,7 +207,7 @@ export function useBaghchalGame() {
             placedGoats: newPlacedGoats,
             currentPlayer: 'tiger' as const,
             lastMove: { from: position, to: position },
-            phase: newPlacedGoats >= TOTAL_GOATS ? 'moving' : 'placing',
+            phase: newPlacedGoats >= TOTAL_GOATS ? 'moving' as const : 'placing' as const,
           };
         }
         return prevState;
@@ -370,6 +370,8 @@ export function useBaghchalGame() {
             newBoard[randomSpot.row][randomSpot.col] = 'goat';
             
             const newPlacedGoats = placedGoats + 1;
+            const newPhase: 'placing' | 'moving' = newPlacedGoats >= TOTAL_GOATS ? 'moving' : 'placing';
+            
             const newState = {
               ...prevState,
               board: newBoard,
@@ -377,7 +379,7 @@ export function useBaghchalGame() {
               currentPlayer: 'tiger' as const,
               aiThinking: false,
               lastMove: { from: randomSpot, to: randomSpot },
-              phase: newPlacedGoats >= TOTAL_GOATS ? 'moving' : 'placing',
+              phase: newPhase,
             };
             
             // Check for winner
