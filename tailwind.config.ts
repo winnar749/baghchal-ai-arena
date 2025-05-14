@@ -64,10 +64,14 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				game: {
-					board: '#E5DEFF',
-					line: '#8B5CF6',
+					board: '#8CA2AD',
+					dark: '#5A7D8C',
+					light: '#DDE5E9',
+					line: '#3A5463',
 					tiger: '#F97316',
-					goat: '#0EA5E9',
+					goat: '#1E293B',
+					highlight: '#FFD700',
+					validmove: 'rgba(124, 252, 0, 0.5)'
 				}
 			},
 			borderRadius: {
@@ -77,20 +81,12 @@ export default {
 			},
 			keyframes: {
 				'accordion-down': {
-					from: {
-						height: '0'
-					},
-					to: {
-						height: 'var(--radix-accordion-content-height)'
-					}
+					from: { height: '0' },
+					to: { height: 'var(--radix-accordion-content-height)' }
 				},
 				'accordion-up': {
-					from: {
-						height: 'var(--radix-accordion-content-height)'
-					},
-					to: {
-						height: '0'
-					}
+					from: { height: 'var(--radix-accordion-content-height)' },
+					to: { height: '0' }
 				},
 				'piece-bounce': {
 					'0%, 100%': { transform: 'translateY(0)' },

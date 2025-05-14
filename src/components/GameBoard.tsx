@@ -20,7 +20,7 @@ const GameBoard: React.FC<GameBoardProps> = ({
   onIntersectionClick 
 }) => {
   const isMobile = useIsMobile();
-  const boardSize = isMobile ? 300 : 400;
+  const boardSize = isMobile ? 320 : 460;
   const cellSize = boardSize / 4; // 5 intersections means 4 cells
   
   // Generate all intersection points
@@ -56,12 +56,42 @@ const GameBoard: React.FC<GameBoardProps> = ({
   const isValidMoveTarget = (position: Position) => {
     return validMoves.some(move => move.row === position.row && move.col === position.col);
   };
+
+  // Generate checkerboard pattern cells
+  const cells = useMemo(() => {
+    const cellsArray = [];
+    for (let row = 0; row < 4; row++) {
+      for (let col = 0; col < 4; col++) {
+        const isDark = (row + col) % 2 === 1;
+        cellsArray.push({
+          row,
+          col,
+          isDark
+        });
+      }
+    }
+    return cellsArray;
+  }, []);
   
   return (
     <div 
-      className="relative mx-auto bg-game-board rounded-lg p-4 shadow-lg" 
+      className="relative mx-auto bg-game-board rounded-lg shadow-xl border border-game-line/30 overflow-hidden"
       style={{ width: boardSize, height: boardSize }}
     >
+      {/* Checkerboard pattern */}
+      {cells.map(({ row, col, isDark }) => (
+        <div 
+          key={`cell-${row}-${col}`}
+          className={`absolute game-cell ${isDark ? 'game-cell-dark' : 'game-cell-light'}`}
+          style={{
+            top: row * cellSize,
+            left: col * cellSize,
+            width: cellSize,
+            height: cellSize,
+          }}
+        />
+      ))}
+      
       {/* Horizontal lines */}
       {[0, 1, 2, 3, 4].map(row => (
         <div 
@@ -69,6 +99,7 @@ const GameBoard: React.FC<GameBoardProps> = ({
           className="game-board-horizontal-line" 
           style={{ 
             top: row * cellSize,
+            zIndex: 5
           }}
         />
       ))}
@@ -80,16 +111,17 @@ const GameBoard: React.FC<GameBoardProps> = ({
           className="game-board-vertical-line" 
           style={{ 
             left: col * cellSize,
+            zIndex: 5
           }}
         />
       ))}
       
       {/* Diagonal lines */}
       <div className="game-board-diagonal-line" style={{ 
-        top: 0, left: 0, width: `${Math.sqrt(2) * boardSize}px` 
+        top: 0, left: 0, width: `${Math.sqrt(2) * boardSize}px`, zIndex: 5
       }} />
       <div className="game-board-diagonal-line-reverse" style={{ 
-        top: 0, right: 0, width: `${Math.sqrt(2) * boardSize}px` 
+        top: 0, right: 0, width: `${Math.sqrt(2) * boardSize}px`, zIndex: 5
       }} />
       
       {/* Intersection points */}
@@ -99,34 +131,63 @@ const GameBoard: React.FC<GameBoardProps> = ({
         const isSelected = selectedPosition && 
                           selectedPosition.row === row && 
                           selectedPosition.col === col;
-        const isHighlighted = isInLastMove(position) || isValidMoveTarget(position);
+        const isHighlighted = isInLastMove(position);
+        const isValidMove = isValidMoveTarget(position);
                           
         return (
           <div
             key={`intersection-${row}-${col}`}
-            className={`absolute ${isValid ? 'cursor-pointer' : ''} ${
-              isHighlighted ? 'bg-yellow-200/50 rounded-full -translate-x-1/2 -translate-y-1/2' : 'bg-transparent'
-            }`}
+            className={`absolute ${isValid ? 'cursor-pointer' : ''}`}
             style={{
               left: col * cellSize,
               top: row * cellSize,
-              width: isHighlighted ? 16 : 8,
-              height: isHighlighted ? 16 : 8,
-              zIndex: piece ? 20 : 10
+              width: cellSize,
+              height: cellSize,
+              zIndex: piece ? 20 : 10,
+              transform: 'translate(-50%, -50%)',
             }}
             onClick={() => isValid && onIntersectionClick(position)}
           >
+            {/* Highlight for last move */}
+            {isHighlighted && (
+              <div className="absolute w-5 h-5 bg-game-highlight/40 rounded-full" 
+                style={{ left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }} />
+            )}
+            
+            {/* Highlight for valid move */}
+            {isValidMove && !piece && (
+              <div className="absolute w-5 h-5 bg-game-validmove rounded-full" 
+                style={{ left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }} />
+            )}
+            
             <div className="game-board-point absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+            
             {piece && (
               <GamePiece 
                 type={piece} 
                 isSelected={isSelected}
-                className="left-0 top-0"
               />
             )}
           </div>
         );
       })}
+      
+      {/* Board coordinates (chess-like) */}
+      <div className="absolute bottom-1 left-0 w-full flex justify-around text-xs text-gray-600 font-medium">
+        <div style={{ width: cellSize, textAlign: 'center' }}>A</div>
+        <div style={{ width: cellSize, textAlign: 'center' }}>B</div>
+        <div style={{ width: cellSize, textAlign: 'center' }}>C</div>
+        <div style={{ width: cellSize, textAlign: 'center' }}>D</div>
+        <div style={{ width: cellSize, textAlign: 'center' }}>E</div>
+      </div>
+      
+      <div className="absolute right-1 top-0 h-full flex flex-col justify-around text-xs text-gray-600 font-medium">
+        <div style={{ height: cellSize, lineHeight: `${cellSize}px` }}>1</div>
+        <div style={{ height: cellSize, lineHeight: `${cellSize}px` }}>2</div>
+        <div style={{ height: cellSize, lineHeight: `${cellSize}px` }}>3</div>
+        <div style={{ height: cellSize, lineHeight: `${cellSize}px` }}>4</div>
+        <div style={{ height: cellSize, lineHeight: `${cellSize}px` }}>5</div>
+      </div>
     </div>
   );
 };

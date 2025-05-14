@@ -14,22 +14,24 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="w-full py-4 px-6 bg-white shadow-sm">
-      <div className="max-w-5xl mx-auto flex justify-between items-center">
-        <div className="flex items-center space-x-2">
-          <div className="h-8 w-8 rounded-full bg-game-tiger grid place-items-center text-white">
-            <span className="text-xs font-bold">T</span>
+    <header className="w-full py-3 px-6 bg-[#312E2B] text-white shadow-md">
+      <div className="max-w-7xl mx-auto flex justify-between items-center">
+        <div className="flex items-center space-x-3">
+          <div className="h-10 w-10 rounded-md bg-game-tiger grid place-items-center text-white">
+            <span className="text-lg font-bold">♚</span>
           </div>
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-game-tiger to-game-goat bg-clip-text text-transparent">
-            Baghchal
+          <h1 className="text-2xl font-bold">
+            Baghchal<span className="text-game-tiger">.com</span>
           </h1>
         </div>
         
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-6">
+          <button className="text-gray-300 hover:text-white transition-colors">Play</button>
+          <button className="text-gray-300 hover:text-white transition-colors">Puzzles</button>
           <RulesModal />
           <button 
             onClick={handleAboutClick}
-            className="text-gray-600 hover:text-primary text-sm"
+            className="text-gray-300 hover:text-white transition-colors"
           >
             About
           </button>

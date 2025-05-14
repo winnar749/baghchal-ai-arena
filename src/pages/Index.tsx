@@ -41,49 +41,51 @@ const Index: React.FC = () => {
   };
   
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-50 to-indigo-50 flex flex-col">
+    <div className="min-h-screen bg-[#E5E5E5] flex flex-col">
       <Header />
       
       <main className="flex-1 py-8 px-4">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-2xl font-bold text-center mb-6">
-            Baghchal with Reinforcement Learning
-          </h2>
-          
+        <div className="max-w-6xl mx-auto">
           <div className="grid gap-8 md:grid-cols-2 items-start">
-            <div className="order-2 md:order-1">
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <h3 className="text-lg font-semibold mb-4">Game Status</h3>
-                <GameControls 
-                  currentPlayer={gameState.currentPlayer}
-                  placedGoats={gameState.placedGoats}
-                  capturedGoats={gameState.capturedGoats}
-                  winner={gameState.winner}
-                  onReset={resetGame}
-                  onAIMove={makeAIMove}
-                  gameMode={gameMode}
-                  onModeChange={handleModeChange}
-                  aiThinking={gameState.aiThinking}
-                />
+            <div className="order-2 md:order-1 space-y-6">
+              <GameControls 
+                currentPlayer={gameState.currentPlayer}
+                placedGoats={gameState.placedGoats}
+                capturedGoats={gameState.capturedGoats}
+                winner={gameState.winner}
+                onReset={resetGame}
+                onAIMove={makeAIMove}
+                gameMode={gameMode}
+                onModeChange={handleModeChange}
+                aiThinking={gameState.aiThinking}
+              />
+              
+              <div className="bg-white p-5 rounded-lg shadow-md">
+                <h3 className="text-lg font-semibold mb-3 flex items-center">
+                  <div className="h-5 w-1 bg-primary mr-2"></div>
+                  Game Status
+                </h3>
                 
                 {gameState.phase === 'placing' && gameState.currentPlayer === 'goat' && (
-                  <div className="mt-4 p-3 bg-blue-50 rounded-md text-sm">
-                    <p>Goat placement phase: Place your goat on any empty intersection</p>
+                  <div className="p-3 bg-blue-50 rounded-md text-sm border-l-4 border-blue-500">
+                    <p className="font-medium">Goat placement phase</p>
+                    <p className="text-xs text-gray-600 mt-1">Place your goat on any empty intersection</p>
                   </div>
                 )}
                 
                 {gameState.selectedPosition && (
-                  <div className="mt-4 p-3 bg-green-50 rounded-md text-sm">
-                    <p>Piece selected! Click on a highlighted point to move</p>
+                  <div className="p-3 bg-green-50 rounded-md text-sm border-l-4 border-green-500 mt-3">
+                    <p className="font-medium">Piece selected!</p>
+                    <p className="text-xs text-gray-600 mt-1">Click on a highlighted point to move</p>
                   </div>
                 )}
                 
                 {gameState.winner && (
-                  <div className="mt-4 p-3 bg-yellow-50 rounded-md text-center">
-                    <p className="font-bold text-lg">
+                  <div className="p-3 bg-yellow-50 rounded-md text-sm border-l-4 border-yellow-500 mt-3">
+                    <p className="font-medium text-center">
                       {gameState.winner === 'tiger' ? '🐯 Tigers win!' : '🐐 Goats win!'}
                     </p>
-                    <p className="text-sm mt-2">
+                    <p className="text-xs text-gray-600 mt-1 text-center">
                       {gameState.winner === 'tiger' 
                         ? 'Tigers captured 5 goats!' 
                         : 'Tigers have no valid moves left!'}
@@ -92,18 +94,24 @@ const Index: React.FC = () => {
                 )}
               </div>
               
-              <div className="mt-6 bg-white p-6 rounded-lg shadow-md">
-                <h3 className="text-lg font-semibold mb-4">Reinforcement Learning</h3>
+              <div className="bg-white p-5 rounded-lg shadow-md">
+                <h3 className="text-lg font-semibold mb-3 flex items-center">
+                  <div className="h-5 w-1 bg-primary mr-2"></div>
+                  Reinforcement Learning
+                </h3>
                 <p className="text-sm text-gray-600">
-                  This implementation will be enhanced with reinforcement learning to develop intelligent playing strategies. Stay tuned for updates!
+                  This implementation will integrate reinforcement learning to develop intelligent playing strategies.
                 </p>
-                <div className="mt-4 h-20 bg-gray-100 rounded-md flex items-center justify-center">
-                  <p className="text-gray-500">RL visualization coming soon</p>
+                <div className="mt-4 h-24 bg-gray-50 rounded-md flex items-center justify-center border border-gray-200">
+                  <div className="text-center">
+                    <p className="text-gray-400 text-sm">RL visualization</p>
+                    <p className="text-xs text-gray-400 mt-1">Coming soon</p>
+                  </div>
                 </div>
               </div>
             </div>
             
-            <div className="order-1 md:order-2 flex justify-center">
+            <div className="order-1 md:order-2 flex justify-center p-6 bg-white rounded-lg shadow-md">
               <GameBoard 
                 board={gameState.board}
                 selectedPosition={gameState.selectedPosition}
@@ -116,8 +124,11 @@ const Index: React.FC = () => {
         </div>
       </main>
       
-      <footer className="py-4 text-center text-sm text-gray-500 mt-auto">
-        <p>Baghchal Game with Reinforcement Learning &copy; {new Date().getFullYear()}</p>
+      <footer className="py-4 px-6 text-center text-sm text-gray-500 bg-[#312E2B] text-gray-300">
+        <div className="max-w-6xl mx-auto flex justify-between items-center">
+          <p>Baghchal Game with Reinforcement Learning</p>
+          <p>&copy; {new Date().getFullYear()}</p>
+        </div>
       </footer>
     </div>
   );

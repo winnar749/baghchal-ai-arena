@@ -134,7 +134,7 @@ const createInitialGameState = (): GameState => {
   
   return {
     board,
-    currentPlayer: 'goat', // Goats go first in traditional rules
+    currentPlayer: 'goat' as const, // Explicitly typed as 'goat'
     phase: 'placing', // Start with the goat placing phase
     placedGoats: 0,
     capturedGoats: 0,
@@ -205,7 +205,7 @@ export function useBaghchalGame() {
             ...prevState,
             board: newBoard,
             placedGoats: newPlacedGoats,
-            currentPlayer: 'tiger', // Switch turn to tigers
+            currentPlayer: 'tiger' as const,
             lastMove: { from: position, to: position },
             phase: newPlacedGoats >= TOTAL_GOATS ? 'moving' : 'placing',
           };
@@ -267,7 +267,7 @@ export function useBaghchalGame() {
             const newState = {
               ...prevState,
               board: newBoard,
-              currentPlayer: currentPlayer === 'tiger' ? 'goat' : 'tiger',
+              currentPlayer: currentPlayer === 'tiger' ? ('goat' as const) : ('tiger' as const),
               selectedPosition: null,
               lastMove: {
                 from: selectedPosition,
@@ -289,7 +289,7 @@ export function useBaghchalGame() {
             const newState = {
               ...prevState,
               board: newBoard,
-              currentPlayer: currentPlayer === 'tiger' ? 'goat' : 'tiger',
+              currentPlayer: currentPlayer === 'tiger' ? ('goat' as const) : ('tiger' as const),
               selectedPosition: null,
               capturedGoats: prevState.capturedGoats + 1,
               lastMove: {
@@ -314,7 +314,7 @@ export function useBaghchalGame() {
       
       return prevState;
     });
-  }, [gameState]);
+  }, [gameState.winner, gameState.aiThinking]);
 
   // Get valid moves for the currently selected position
   const getValidMovesForSelected = useCallback((): Position[] => {
@@ -374,7 +374,7 @@ export function useBaghchalGame() {
               ...prevState,
               board: newBoard,
               placedGoats: newPlacedGoats,
-              currentPlayer: 'tiger',
+              currentPlayer: 'tiger' as const,
               aiThinking: false,
               lastMove: { from: randomSpot, to: randomSpot },
               phase: newPlacedGoats >= TOTAL_GOATS ? 'moving' : 'placing',
@@ -443,7 +443,7 @@ export function useBaghchalGame() {
             const newState = {
               ...prevState,
               board: newBoard,
-              currentPlayer: currentPlayer === 'tiger' ? 'goat' : 'tiger',
+              currentPlayer: currentPlayer === 'tiger' ? ('goat' as const) : ('tiger' as const),
               aiThinking: false,
               capturedGoats,
               lastMove: move,
