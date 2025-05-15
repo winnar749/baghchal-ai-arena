@@ -59,17 +59,19 @@ const GameBoard: React.FC<GameBoardProps> = ({
 
   return (
     <div 
-      className="relative mx-auto bg-game-board rounded-lg shadow-xl border border-game-line/30 overflow-hidden"
+      className="relative mx-auto bg-gradient-to-br from-amber-100 to-orange-100 rounded-lg shadow-xl border border-amber-600/30 overflow-hidden"
       style={{ width: boardSize, height: boardSize }}
     >
-      {/* Background */}
-      <div className="absolute inset-0 bg-game-board"></div>
+      {/* Background pattern for traditional look */}
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBkPSJNMCAwaDIwdjIwSDB6IiBmaWxsPSIjZjhmM2UzIiBvcGFjaXR5PSIuMiIvPjxwYXRoIGQ9Ik0yMCAwaDIwdjIwSDIweiIgZmlsbD0iI2Y1ZGViYiIgb3BhY2l0eT0iLjIiLz48cGF0aCBkPSJNMCAyMGgyMHYyMEgweiIgZmlsbD0iI2Y1ZGViYiIgb3BhY2l0eT0iLjIiLz48cGF0aCBkPSJNMjAgMjBoMjB2MjBIMjB6IiBmaWxsPSIjZjhmM2UzIiBvcGFjaXR5PSIuMiIvPjwvZz48L3N2Zz4=')] opacity-20"></div>
+      </div>
       
       {/* Horizontal lines */}
       {[0, 1, 2, 3, 4].map(row => (
         <div 
           key={`h-line-${row}`} 
-          className="game-board-horizontal-line" 
+          className="absolute bg-amber-900 h-[2px] w-full" 
           style={{ 
             top: row * cellSize,
             zIndex: 5
@@ -81,7 +83,7 @@ const GameBoard: React.FC<GameBoardProps> = ({
       {[0, 1, 2, 3, 4].map(col => (
         <div 
           key={`v-line-${col}`} 
-          className="game-board-vertical-line" 
+          className="absolute bg-amber-900 w-[2px] h-full" 
           style={{ 
             left: col * cellSize,
             zIndex: 5
@@ -90,12 +92,10 @@ const GameBoard: React.FC<GameBoardProps> = ({
       ))}
       
       {/* Diagonal lines */}
-      <div className="game-board-diagonal-line" style={{ 
-        top: 0, left: 0, width: `${Math.sqrt(2) * boardSize}px`, zIndex: 5
-      }} />
-      <div className="game-board-diagonal-line-reverse" style={{ 
-        top: 0, right: 0, width: `${Math.sqrt(2) * boardSize}px`, zIndex: 5
-      }} />
+      <div className="absolute bg-amber-900 h-[2px] w-[141%] origin-top-left rotate-45" 
+           style={{ top: 0, left: 0, zIndex: 5 }} />
+      <div className="absolute bg-amber-900 h-[2px] w-[141%] origin-top-right -rotate-45" 
+           style={{ top: 0, right: 0, zIndex: 5 }} />
       
       {/* Intersection points */}
       {intersections.map(({ position, isValid }) => {
@@ -123,17 +123,19 @@ const GameBoard: React.FC<GameBoardProps> = ({
           >
             {/* Highlight for last move */}
             {isHighlighted && (
-              <div className="absolute w-5 h-5 bg-game-highlight/40 rounded-full" 
+              <div className="absolute w-6 h-6 bg-amber-300/40 rounded-full" 
                 style={{ left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }} />
             )}
             
             {/* Highlight for valid move */}
             {isValidMove && !piece && (
-              <div className="absolute w-5 h-5 bg-game-validmove rounded-full" 
+              <div className="absolute w-6 h-6 bg-green-500/30 rounded-full animate-pulse" 
                 style={{ left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }} />
             )}
             
-            <div className="game-board-point absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+            {/* Intersection dot */}
+            <div className="absolute w-3 h-3 rounded-full bg-amber-900 border border-amber-600" 
+                 style={{ left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }} />
             
             {piece && (
               <GamePiece 

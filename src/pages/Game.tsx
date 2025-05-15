@@ -42,7 +42,7 @@ const Game: React.FC = () => {
   };
   
   return (
-    <div className="min-h-screen bg-[#E5E5E5] flex flex-col">
+    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-amber-100 flex flex-col">
       <Header />
       
       <main className="flex-1 py-8 px-4">
@@ -61,9 +61,9 @@ const Game: React.FC = () => {
                 aiThinking={gameState.aiThinking}
               />
               
-              <div className="bg-white p-5 rounded-lg shadow-md">
+              <div className="bg-white p-5 rounded-lg shadow-md border border-amber-100">
                 <h3 className="text-lg font-semibold mb-3 flex items-center">
-                  <div className="h-5 w-1 bg-primary mr-2"></div>
+                  <div className="h-5 w-1 bg-amber-500 mr-2"></div>
                   Game Status
                 </h3>
                 
@@ -82,7 +82,7 @@ const Game: React.FC = () => {
                 )}
                 
                 {gameState.winner && (
-                  <div className="p-3 bg-yellow-50 rounded-md text-sm border-l-4 border-yellow-500 mt-3">
+                  <div className="p-3 bg-amber-50 rounded-md text-sm border-l-4 border-amber-500 mt-3">
                     <p className="font-medium text-center">
                       {gameState.winner === 'tiger' ? '🐯 Tigers win!' : '🐐 Goats win!'}
                     </p>
@@ -95,24 +95,24 @@ const Game: React.FC = () => {
                 )}
               </div>
               
-              <div className="bg-white p-5 rounded-lg shadow-md">
+              <div className="bg-white p-5 rounded-lg shadow-md border border-amber-100">
                 <h3 className="text-lg font-semibold mb-3 flex items-center">
-                  <div className="h-5 w-1 bg-primary mr-2"></div>
+                  <div className="h-5 w-1 bg-amber-500 mr-2"></div>
                   Reinforcement Learning
                 </h3>
                 <p className="text-sm text-gray-600">
                   This implementation will integrate reinforcement learning to develop intelligent playing strategies.
                 </p>
-                <div className="mt-4 h-24 bg-gray-50 rounded-md flex items-center justify-center border border-gray-200">
+                <div className="mt-4 h-24 bg-amber-50 rounded-md flex items-center justify-center border border-amber-200">
                   <div className="text-center">
-                    <p className="text-gray-400 text-sm">RL visualization</p>
-                    <p className="text-xs text-gray-400 mt-1">Coming soon</p>
+                    <p className="text-amber-500 text-sm">RL visualization</p>
+                    <p className="text-xs text-amber-400 mt-1">Coming soon</p>
                   </div>
                 </div>
               </div>
             </div>
             
-            <div className="order-1 md:order-2 flex justify-center p-6 bg-white rounded-lg shadow-md">
+            <div className="order-1 md:order-2 flex justify-center p-6 bg-white rounded-lg shadow-md border border-amber-100">
               <GameBoard 
                 board={gameState.board}
                 selectedPosition={gameState.selectedPosition}
@@ -125,7 +125,7 @@ const Game: React.FC = () => {
         </div>
       </main>
       
-      <footer className="py-4 px-6 text-center text-sm text-gray-500 bg-[#312E2B] text-gray-300">
+      <footer className="py-4 px-6 text-center text-sm text-amber-100 bg-amber-900">
         <div className="max-w-6xl mx-auto flex justify-between items-center">
           <p>Baghchal Game with Reinforcement Learning</p>
           <p>&copy; {new Date().getFullYear()}</p>

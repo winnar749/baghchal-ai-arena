@@ -98,27 +98,27 @@
 
 @layer components {
   .game-board-point {
-    @apply w-2.5 h-2.5 rounded-full bg-game-line;
+    @apply w-3 h-3 rounded-full bg-amber-900 border border-amber-600;
   }
 
   .game-board-line {
-    @apply absolute bg-game-line;
+    @apply absolute bg-amber-900;
   }
 
   .game-board-horizontal-line {
-    @apply game-board-line h-[1.5px] w-full;
+    @apply game-board-line h-[2px] w-full;
   }
 
   .game-board-vertical-line {
-    @apply game-board-line w-[1.5px] h-full;
+    @apply game-board-line w-[2px] h-full;
   }
 
   .game-board-diagonal-line {
-    @apply game-board-line w-[1.5px] rotate-45 origin-top-left;
+    @apply game-board-line h-[2px] rotate-45 origin-top-left;
   }
 
   .game-board-diagonal-line-reverse {
-    @apply game-board-line w-[1.5px] -rotate-45 origin-top-right;
+    @apply game-board-line h-[2px] -rotate-45 origin-top-right;
   }
   
   .game-cell {
@@ -126,14 +126,28 @@
   }
   
   .game-cell-dark {
-    @apply bg-game-dark;
+    @apply bg-amber-200/40;
   }
   
   .game-cell-light {
-    @apply bg-game-light;
+    @apply bg-amber-50/40;
   }
   
   .chess-like-button {
-    @apply px-4 py-2 bg-primary text-white rounded font-medium hover:bg-primary/90 transition-colors;
+    @apply px-4 py-2 bg-gradient-to-br from-amber-500 to-orange-600 text-white rounded font-medium 
+           hover:from-amber-600 hover:to-orange-700 transition-colors shadow-md;
+  }
+
+  @keyframes piece-bounce {
+    0%, 100% {
+      transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+      transform: translate(-50%, -50%) scale(1.05);
+    }
+  }
+
+  .animate-piece-bounce {
+    animation: piece-bounce 0.8s ease-in-out infinite;
   }
 }

@@ -17,9 +17,9 @@ const GamePiece: React.FC<GamePieceProps> = ({ type, isSelected = false, classNa
   let pieceClasses = '';
   
   if (type === 'tiger') {
-    pieceClasses = "bg-game-tiger text-white grid place-items-center font-bold border-2 border-white";
+    pieceClasses = "bg-gradient-to-br from-amber-500 to-orange-600 text-white grid place-items-center font-bold border-2 border-amber-300";
   } else if (type === 'goat') {
-    pieceClasses = "bg-game-goat text-white grid place-items-center border-2 border-white";
+    pieceClasses = "bg-gradient-to-br from-slate-700 to-slate-900 text-white grid place-items-center border-2 border-slate-400";
   }
   
   const selectedClasses = isSelected ? "ring-4 ring-yellow-300 animate-piece-bounce" : "";
@@ -28,12 +28,12 @@ const GamePiece: React.FC<GamePieceProps> = ({ type, isSelected = false, classNa
     <div className={`${baseClasses} ${sizeClasses} ${pieceClasses} ${selectedClasses} ${className}`}>
       {type === 'tiger' && (
         <span className="text-xs md:text-sm flex items-center justify-center">
-          ♚
+          🐯
         </span>
       )}
       {type === 'goat' && (
         <span className="text-xs md:text-sm flex items-center justify-center">
-          ♟
+          🐐
         </span>
       )}
     </div>
