@@ -17,12 +17,12 @@ const GamePiece: React.FC<GamePieceProps> = ({ type, isSelected = false, classNa
   let pieceClasses = '';
   
   if (type === 'tiger') {
-    pieceClasses = "bg-gradient-to-br from-amber-500 to-orange-600 text-white grid place-items-center font-bold border-2 border-amber-300";
+    pieceClasses = "bg-gradient-to-br from-amber-500 to-orange-600 dark:from-amber-400 dark:to-orange-500 text-white grid place-items-center font-bold border-2 border-amber-300 dark:border-amber-200";
   } else if (type === 'goat') {
-    pieceClasses = "bg-gradient-to-br from-slate-700 to-slate-900 text-white grid place-items-center border-2 border-slate-400";
+    pieceClasses = "bg-gradient-to-br from-slate-700 to-slate-900 dark:from-slate-600 dark:to-slate-800 text-white grid place-items-center border-2 border-slate-400 dark:border-slate-300";
   }
   
-  const selectedClasses = isSelected ? "ring-4 ring-yellow-300 animate-piece-bounce" : "";
+  const selectedClasses = isSelected ? "ring-4 ring-yellow-300 dark:ring-yellow-200 animate-piece-bounce" : "";
   
   return (
     <div className={`${baseClasses} ${sizeClasses} ${pieceClasses} ${selectedClasses} ${className}`}>
