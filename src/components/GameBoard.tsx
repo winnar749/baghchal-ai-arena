@@ -80,7 +80,7 @@ const GameBoard: React.FC<GameBoardProps> = ({
 
   return (
     <div 
-      className="relative mx-auto bg-white dark:bg-black rounded-lg shadow-xl border border-amber-600/30 dark:border-amber-500/50 overflow-hidden"
+      className="relative mx-auto bg-white dark:bg-black border border-amber-600/30 dark:border-amber-500/50 overflow-hidden"
       style={{ width: boardSize, height: boardSize }}
     >
       {/* Background pattern */}
