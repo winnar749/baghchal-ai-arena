@@ -9,7 +9,7 @@ const Landing: React.FC = () => {
   const { theme, setTheme } = useTheme();
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-amber-100 dark:from-amber-950 dark:to-amber-900 flex flex-col">
+    <div className="min-h-screen bg-white dark:bg-black flex flex-col">
       <header className="w-full py-3 px-6 bg-amber-900 dark:bg-amber-800 text-white">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center space-x-3">
@@ -30,7 +30,7 @@ const Landing: React.FC = () => {
             </button>
             <button
               onClick={() => setTheme('dark')}
-              className={`p-2 rounded-md ${theme === 'dark' ? 'bg-amber-950 text-amber-300' : 'bg-amber-800 text-amber-200'}`}
+              className={`p-2 rounded-md ${theme === 'dark' ? 'bg-black text-amber-300' : 'bg-amber-800 text-amber-200'}`}
               aria-label="Use dark theme"
             >
               🌙
@@ -39,7 +39,7 @@ const Landing: React.FC = () => {
         </div>
       </header>
 
-      <main className="flex-1 flex flex-col items-center justify-center px-4 py-12">
+      <main className="flex-1 flex flex-col items-center justify-center px-4 py-12 bg-white dark:bg-black">
         <div className="max-w-4xl w-full text-center space-y-12">
           <div className="space-y-6">
             <h1 className="text-4xl md:text-6xl font-bold text-amber-900 dark:text-amber-100">
@@ -51,14 +51,14 @@ const Landing: React.FC = () => {
           </div>
 
           <div className="relative mx-auto">
-            <AspectRatio ratio={16/9} className="w-full max-w-3xl bg-amber-50/80 dark:bg-amber-900/50 rounded-lg shadow-xl overflow-hidden border border-amber-200 dark:border-amber-700">
+            <AspectRatio ratio={16/9} className="w-full max-w-3xl bg-white dark:bg-black rounded-lg shadow-xl overflow-hidden border border-amber-200 dark:border-amber-700">
               <div className="absolute inset-0 grid place-items-center">
                 <div className="relative w-3/4 md:w-1/2 aspect-square">
                   {/* Traditional Baghchal Board */}
-                  <div className="absolute w-full h-full bg-gradient-to-br from-amber-100 to-orange-100 dark:from-amber-900 dark:to-amber-800 rounded-lg shadow-xl border border-amber-600/30 dark:border-amber-500/50">
+                  <div className="absolute w-full h-full bg-white dark:bg-black rounded-lg shadow-xl border border-amber-600/30 dark:border-amber-500/50">
                     {/* Background pattern for traditional look */}
                     <div className="absolute inset-0">
-                      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBkPSJNMCAwaDIwdjIwSDB6IiBmaWxsPSIjZjhmM2UzIiBvcGFjaXR5PSIuMiIvPjxwYXRoIGQ9Ik0yMCAwaDIwdjIwSDIweiIgZmlsbD0iI2Y1ZGViYiIgb3BhY2l0eT0iLjIiLz48cGF0aCBkPSJNMCAyMGgyMHYyMEgweiIgZmlsbD0iI2Y1ZGViYiIgb3BhY2l0eT0iLjIiLz48cGF0aCBkPSJNMjAgMjBoMjB2MjBIMjB6IiBmaWxsPSIjZjhmM2UzIiBvcGFjaXR5PSIuMiIvPjwvZz48L3N2Zz4=')] opacity-20 dark:opacity-10"></div>
+                      <div className="absolute inset-0 opacity-5 dark:opacity-10"></div>
                     </div>
                     
                     {/* Horizontal lines */}
@@ -80,13 +80,13 @@ const Landing: React.FC = () => {
                     ))}
                     
                     {/* Traditional diagonal lines */}
-                    {/* Center diagonals */}
+                    {/* Full diagonals through center */}
                     <div className="absolute bg-amber-900 dark:bg-amber-400 h-[2px] w-[141.4%] origin-center rotate-45" 
                          style={{ top: '50%', left: '50%', transform: 'translate(-50%, -50%) rotate(45deg)' }} />
                     <div className="absolute bg-amber-900 dark:bg-amber-400 h-[2px] w-[141.4%] origin-center -rotate-45" 
                          style={{ top: '50%', left: '50%', transform: 'translate(-50%, -50%) rotate(-45deg)' }} />
                          
-                    {/* Corner diagonals */}
+                    {/* Half diagonals from corners to center */}
                     <div className="absolute bg-amber-900 dark:bg-amber-400 h-[2px] w-[70.7%] origin-top-left rotate-45" 
                          style={{ top: 0, left: 0 }} />
                     <div className="absolute bg-amber-900 dark:bg-amber-400 h-[2px] w-[70.7%] origin-top-right -rotate-45" 
@@ -95,6 +95,24 @@ const Landing: React.FC = () => {
                          style={{ bottom: 0, left: 0 }} />
                     <div className="absolute bg-amber-900 dark:bg-amber-400 h-[2px] w-[70.7%] origin-bottom-right rotate-45" 
                          style={{ bottom: 0, right: 0 }} />
+                    
+                    {/* Half diagonals from middle edge points to center */}
+                    <div className="absolute bg-amber-900 dark:bg-amber-400 h-[2px] w-[70.7%] origin-center" 
+                         style={{ top: 0, left: '50%', transform: 'translateX(-50%) rotate(45deg)', transformOrigin: 'bottom', width: '70.7%' }} />
+                    <div className="absolute bg-amber-900 dark:bg-amber-400 h-[2px] w-[70.7%] origin-center" 
+                         style={{ top: 0, left: '50%', transform: 'translateX(-50%) rotate(-45deg)', transformOrigin: 'bottom', width: '70.7%' }} />
+                    <div className="absolute bg-amber-900 dark:bg-amber-400 h-[2px] w-[70.7%] origin-center" 
+                         style={{ top: '50%', left: 0, transform: 'translateY(-50%) rotate(45deg)', transformOrigin: 'left', width: '70.7%' }} />
+                    <div className="absolute bg-amber-900 dark:bg-amber-400 h-[2px] w-[70.7%] origin-center" 
+                         style={{ top: '50%', left: 0, transform: 'translateY(-50%) rotate(-45deg)', transformOrigin: 'left', width: '70.7%' }} />
+                    <div className="absolute bg-amber-900 dark:bg-amber-400 h-[2px] w-[70.7%] origin-center" 
+                         style={{ top: '50%', right: 0, transform: 'translateY(-50%) rotate(45deg)', transformOrigin: 'right', width: '70.7%' }} />
+                    <div className="absolute bg-amber-900 dark:bg-amber-400 h-[2px] w-[70.7%] origin-center" 
+                         style={{ top: '50%', right: 0, transform: 'translateY(-50%) rotate(-45deg)', transformOrigin: 'right', width: '70.7%' }} />
+                    <div className="absolute bg-amber-900 dark:bg-amber-400 h-[2px] w-[70.7%] origin-center" 
+                         style={{ bottom: 0, left: '50%', transform: 'translateX(-50%) rotate(45deg)', transformOrigin: 'top', width: '70.7%' }} />
+                    <div className="absolute bg-amber-900 dark:bg-amber-400 h-[2px] w-[70.7%] origin-center" 
+                         style={{ bottom: 0, left: '50%', transform: 'translateX(-50%) rotate(-45deg)', transformOrigin: 'top', width: '70.7%' }} />
                     
                     {/* Intersection dots */}
                     {[0, 25, 50, 75, 100].map(percentY => (

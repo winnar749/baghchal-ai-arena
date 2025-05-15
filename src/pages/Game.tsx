@@ -44,21 +44,21 @@ const Game: React.FC = () => {
   };
   
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-amber-100 dark:from-amber-950 dark:to-amber-900 flex flex-col">
+    <div className="min-h-screen bg-white dark:bg-black flex flex-col">
       <Header />
       
       <div className="px-4 py-2 flex justify-end">
         <div className="flex items-center space-x-2">
           <button
             onClick={() => setTheme('light')}
-            className={`p-2 rounded-md ${theme === 'light' ? 'bg-white text-amber-900 shadow' : 'bg-amber-100 text-amber-600'}`}
+            className={`p-2 rounded-md ${theme === 'light' ? 'bg-white text-amber-900 shadow' : 'bg-black text-amber-600'}`}
             aria-label="Use light theme"
           >
             ☀️
           </button>
           <button
             onClick={() => setTheme('dark')}
-            className={`p-2 rounded-md ${theme === 'dark' ? 'bg-amber-950 text-amber-300 shadow' : 'bg-amber-100 text-amber-600'}`}
+            className={`p-2 rounded-md ${theme === 'dark' ? 'bg-black text-amber-300 shadow' : 'bg-white text-amber-600'}`}
             aria-label="Use dark theme"
           >
             🌙
@@ -66,7 +66,7 @@ const Game: React.FC = () => {
         </div>
       </div>
       
-      <main className="flex-1 py-8 px-4">
+      <main className="flex-1 py-8 px-4 bg-white dark:bg-black">
         <div className="max-w-6xl mx-auto">
           <div className="grid gap-8 md:grid-cols-2 items-start">
             <div className="order-2 md:order-1 space-y-6">
@@ -82,7 +82,7 @@ const Game: React.FC = () => {
                 aiThinking={gameState.aiThinking}
               />
               
-              <div className="bg-white dark:bg-gray-800 p-5 rounded-lg shadow-md border border-amber-100 dark:border-amber-800">
+              <div className="bg-white dark:bg-black p-5 rounded-lg shadow-md border border-amber-100 dark:border-amber-800">
                 <h3 className="text-lg font-semibold mb-3 flex items-center">
                   <div className="h-5 w-1 bg-amber-500 dark:bg-amber-400 mr-2"></div>
                   Game Status
@@ -116,7 +116,7 @@ const Game: React.FC = () => {
                 )}
               </div>
               
-              <div className="bg-white dark:bg-gray-800 p-5 rounded-lg shadow-md border border-amber-100 dark:border-amber-800">
+              <div className="bg-white dark:bg-black p-5 rounded-lg shadow-md border border-amber-100 dark:border-amber-800">
                 <h3 className="text-lg font-semibold mb-3 flex items-center">
                   <div className="h-5 w-1 bg-amber-500 dark:bg-amber-400 mr-2"></div>
                   Reinforcement Learning
@@ -124,7 +124,7 @@ const Game: React.FC = () => {
                 <p className="text-sm text-gray-600 dark:text-gray-300">
                   This implementation will integrate reinforcement learning to develop intelligent playing strategies.
                 </p>
-                <div className="mt-4 h-24 bg-amber-50 dark:bg-amber-900/30 rounded-md flex items-center justify-center border border-amber-200 dark:border-amber-700">
+                <div className="mt-4 h-24 bg-white dark:bg-black rounded-md flex items-center justify-center border border-amber-200 dark:border-amber-700">
                   <div className="text-center">
                     <p className="text-amber-500 dark:text-amber-400 text-sm">RL visualization</p>
                     <p className="text-xs text-amber-400 dark:text-amber-300 mt-1">Coming soon</p>
@@ -133,7 +133,7 @@ const Game: React.FC = () => {
               </div>
             </div>
             
-            <div className="order-1 md:order-2 flex justify-center p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md border border-amber-100 dark:border-amber-800">
+            <div className="order-1 md:order-2 flex justify-center p-6 bg-white dark:bg-black rounded-lg shadow-md border border-amber-100 dark:border-amber-800">
               <GameBoard 
                 board={gameState.board}
                 selectedPosition={gameState.selectedPosition}

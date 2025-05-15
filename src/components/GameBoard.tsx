@@ -57,41 +57,35 @@ const GameBoard: React.FC<GameBoardProps> = ({
     return validMoves.some(move => move.row === position.row && move.col === position.col);
   };
 
-  // Function to determine if a position should have diagonal lines
-  const hasDiagonalLines = (row: number, col: number) => {
-    // Traditional Baghchal has diagonals only in specific patterns:
-    // 1. The four corners have diagonal lines
-    if ((row === 0 && col === 0) || 
-        (row === 0 && col === 4) || 
-        (row === 4 && col === 0) || 
-        (row === 4 && col === 4)) {
-      return true;
-    }
-    
-    // 2. Diagonals at center positions on each edge
-    if ((row === 0 && col === 2) || 
-        (row === 2 && col === 0) || 
-        (row === 2 && col === 4) || 
-        (row === 4 && col === 2)) {
-      return true;
-    }
-    
-    // 3. Center of the board
-    if (row === 2 && col === 2) {
-      return true;
-    }
-    
+  // Function to determine if a position has diagonal connections
+  const hasDiagonalConnection = (row: number, col: number, direction: 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight') => {
+    // Traditional Baghchal diagonal pattern
+    // Center point connects to all directions
+    if (row === 2 && col === 2) return true;
+
+    // Corner points
+    if (row === 0 && col === 0 && direction === 'bottomRight') return true;
+    if (row === 0 && col === 4 && direction === 'bottomLeft') return true;
+    if (row === 4 && col === 0 && direction === 'topRight') return true;
+    if (row === 4 && col === 4 && direction === 'topLeft') return true;
+
+    // Inner diagonals from edges
+    if (row === 0 && col === 2 && (direction === 'bottomLeft' || direction === 'bottomRight')) return true;
+    if (row === 2 && col === 0 && (direction === 'topRight' || direction === 'bottomRight')) return true;
+    if (row === 2 && col === 4 && (direction === 'topLeft' || direction === 'bottomLeft')) return true;
+    if (row === 4 && col === 2 && (direction === 'topLeft' || direction === 'topRight')) return true;
+
     return false;
   };
 
   return (
     <div 
-      className="relative mx-auto bg-gradient-to-br from-amber-100 to-orange-100 dark:from-amber-900 dark:to-amber-800 rounded-lg shadow-xl border border-amber-600/30 dark:border-amber-500/50 overflow-hidden"
+      className="relative mx-auto bg-white dark:bg-black rounded-lg shadow-xl border border-amber-600/30 dark:border-amber-500/50 overflow-hidden"
       style={{ width: boardSize, height: boardSize }}
     >
-      {/* Background pattern for traditional look */}
+      {/* Background pattern */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBkPSJNMCAwaDIwdjIwSDB6IiBmaWxsPSIjZjhmM2UzIiBvcGFjaXR5PSIuMiIvPjxwYXRoIGQ9Ik0yMCAwaDIwdjIwSDIweiIgZmlsbD0iI2Y1ZGViYiIgb3BhY2l0eT0iLjIiLz48cGF0aCBkPSJNMCAyMGgyMHYyMEgweiIgZmlsbD0iI2Y1ZGViYiIgb3BhY2l0eT0iLjIiLz48cGF0aCBkPSJNMjAgMjBoMjB2MjBIMjB6IiBmaWxsPSIjZjhmM2UzIiBvcGFjaXR5PSIuMiIvPjwvZz48L3N2Zz4=')] opacity-20 dark:opacity-10"></div>
+        <div className="absolute inset-0 opacity-5 dark:opacity-10"></div>
       </div>
       
       {/* Horizontal lines */}
@@ -118,30 +112,51 @@ const GameBoard: React.FC<GameBoardProps> = ({
         />
       ))}
       
-      {/* Traditional diagonal lines - only in specific positions */}
-      {/* Top-left to bottom-right diagonal from the center */}
+      {/* Traditional diagonal lines */}
+      {/* Full diagonals through the center */}
       <div className="absolute bg-amber-900 dark:bg-amber-400 h-[2px] w-[141.4%] origin-center rotate-45" 
            style={{ top: '50%', left: '50%', transform: 'translate(-50%, -50%) rotate(45deg)', zIndex: 5 }} />
       
-      {/* Top-right to bottom-left diagonal from the center */}
       <div className="absolute bg-amber-900 dark:bg-amber-400 h-[2px] w-[141.4%] origin-center -rotate-45" 
            style={{ top: '50%', left: '50%', transform: 'translate(-50%, -50%) rotate(-45deg)', zIndex: 5 }} />
            
-      {/* Top-left to center */}
+      {/* Half diagonals from corners to center */}
       <div className="absolute bg-amber-900 dark:bg-amber-400 h-[2px] w-[70.7%] origin-top-left rotate-45" 
            style={{ top: 0, left: 0, zIndex: 5 }} />
            
-      {/* Top-right to center */}
       <div className="absolute bg-amber-900 dark:bg-amber-400 h-[2px] w-[70.7%] origin-top-right -rotate-45" 
            style={{ top: 0, right: 0, zIndex: 5 }} />
            
-      {/* Bottom-left to center */}
       <div className="absolute bg-amber-900 dark:bg-amber-400 h-[2px] w-[70.7%] origin-bottom-left -rotate-45" 
            style={{ bottom: 0, left: 0, zIndex: 5 }} />
            
-      {/* Bottom-right to center */}
       <div className="absolute bg-amber-900 dark:bg-amber-400 h-[2px] w-[70.7%] origin-bottom-right rotate-45" 
            style={{ bottom: 0, right: 0, zIndex: 5 }} />
+
+      {/* Half diagonals from middle edge points to center */}
+      <div className="absolute bg-amber-900 dark:bg-amber-400 h-[2px] w-[70.7%] origin-top-center rotate-45" 
+           style={{ top: 0, left: '50%', transform: 'translateX(-50%) rotate(45deg)', transformOrigin: 'bottom', zIndex: 5, width: '70.7%' }} />
+           
+      <div className="absolute bg-amber-900 dark:bg-amber-400 h-[2px] w-[70.7%] origin-top-center -rotate-45" 
+           style={{ top: 0, left: '50%', transform: 'translateX(-50%) rotate(-45deg)', transformOrigin: 'bottom', zIndex: 5, width: '70.7%' }} />
+           
+      <div className="absolute bg-amber-900 dark:bg-amber-400 h-[2px] w-[70.7%] origin-left-middle rotate-45" 
+           style={{ top: '50%', left: 0, transform: 'translateY(-50%) rotate(45deg)', transformOrigin: 'left', zIndex: 5, width: '70.7%' }} />
+           
+      <div className="absolute bg-amber-900 dark:bg-amber-400 h-[2px] w-[70.7%] origin-left-middle -rotate-45" 
+           style={{ top: '50%', left: 0, transform: 'translateY(-50%) rotate(-45deg)', transformOrigin: 'left', zIndex: 5, width: '70.7%' }} />
+           
+      <div className="absolute bg-amber-900 dark:bg-amber-400 h-[2px] w-[70.7%] origin-right-middle rotate-45" 
+           style={{ top: '50%', right: 0, transform: 'translateY(-50%) rotate(45deg)', transformOrigin: 'right', zIndex: 5, width: '70.7%' }} />
+           
+      <div className="absolute bg-amber-900 dark:bg-amber-400 h-[2px] w-[70.7%] origin-right-middle -rotate-45" 
+           style={{ top: '50%', right: 0, transform: 'translateY(-50%) rotate(-45deg)', transformOrigin: 'right', zIndex: 5, width: '70.7%' }} />
+           
+      <div className="absolute bg-amber-900 dark:bg-amber-400 h-[2px] w-[70.7%] origin-bottom-center rotate-45" 
+           style={{ bottom: 0, left: '50%', transform: 'translateX(-50%) rotate(45deg)', transformOrigin: 'top', zIndex: 5, width: '70.7%' }} />
+           
+      <div className="absolute bg-amber-900 dark:bg-amber-400 h-[2px] w-[70.7%] origin-bottom-center -rotate-45" 
+           style={{ bottom: 0, left: '50%', transform: 'translateX(-50%) rotate(-45deg)', transformOrigin: 'top', zIndex: 5, width: '70.7%' }} />
            
       {/* Intersection points */}
       {intersections.map(({ position, isValid }) => {
