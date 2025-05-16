@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { GameState, Position, PieceType } from '../types/game';
-import { getValidMoves, getCaptureMoves } from '../utils/gameBoard';
+import { getValidMoves } from '../utils/gameBoard';
+import { getCaptureMoves } from '../utils/gameRules';
 
 export function useAI(setGameState: React.Dispatch<React.SetStateAction<GameState>>) {
   // Generate and execute AI move

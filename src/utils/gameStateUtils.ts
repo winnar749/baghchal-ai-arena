@@ -1,5 +1,15 @@
+
 import { GameState, PieceType } from '../types/game';
-import { INITIAL_BOARD } from './gameBoard';
+import { createEmptyBoard } from './gameBoard';
+
+// Define the initial board configuration with tigers at corners
+export const INITIAL_BOARD: PieceType[][] = [
+  ['tiger', null, null, null, 'tiger'],
+  [null, null, null, null, null],
+  [null, null, null, null, null],
+  [null, null, null, null, null],
+  ['tiger', null, null, null, 'tiger'],
+];
 
 // Initialize the game board
 export function initializeBoard(): PieceType[][] {
