@@ -58,6 +58,8 @@ const Index: React.FC = () => {
                 gameMode={gameMode}
                 onModeChange={handleModeChange}
                 aiThinking={gameState.aiThinking}
+                tigerTime={gameState.tigerTime}
+                goatTime={gameState.goatTime}
               />
               
               <div className="bg-white p-5 rounded-lg shadow-md">

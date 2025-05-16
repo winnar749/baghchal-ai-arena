@@ -1,138 +1,146 @@
-
-import { useCallback } from 'react';
-import { GameState, Position } from '../types/game';
-import { BOARD_SIZE, TOTAL_GOATS, getValidMoves } from '../utils/gameBoard';
-import { getCaptureMoves, checkWinner } from '../utils/gameRules';
+import { useState, useCallback } from 'react';
+import { GameState, Position, PieceType } from '../types/game';
+import { getValidMoves, getCaptureMoves } from '../utils/gameBoard';
 
 export function useAI(setGameState: React.Dispatch<React.SetStateAction<GameState>>) {
-  // Mock AI move - for future reinforcement learning integration
+  // Generate and execute AI move
   const makeAIMove = useCallback(() => {
-    setGameState(prevState => ({
-      ...prevState,
-      aiThinking: true
-    }));
+    setGameState(prevState => {
+      // Skip if game is over or AI is already thinking
+      if (prevState.winner || prevState.aiThinking) {
+        return prevState;
+      }
 
-    // Simulate AI thinking time
+      // Mark that AI is thinking
+      return {
+        ...prevState,
+        aiThinking: true
+      };
+    });
+
+    // Simple timeout to simulate "thinking" time
     setTimeout(() => {
       setGameState(prevState => {
-        if (prevState.winner) return prevState;
-        
-        const { board, currentPlayer, phase, placedGoats } = prevState;
-        const newBoard = board.map(row => [...row]);
-        let move = null;
-        
-        // Simple random AI logic (to be replaced with RL)
-        if (phase === 'placing' && currentPlayer === 'goat') {
-          // Find all empty spots
-          const emptySpots: Position[] = [];
-          for (let r = 0; r < BOARD_SIZE; r++) {
-            for (let c = 0; c < BOARD_SIZE; c++) {
-              if (board[r][c] === null) {
-                emptySpots.push({ row: r, col: c });
+        // Skip if game is already over
+        if (prevState.winner) {
+          return {
+            ...prevState,
+            aiThinking: false
+          };
+        }
+
+        const currentPlayer = prevState.currentPlayer;
+        const board = prevState.board.map(row => [...row]);
+
+        // Execute AI move based on some strategy
+        // For now, just find any valid move
+        if (currentPlayer === 'tiger') {
+          for (let row = 0; row < 5; row++) {
+            for (let col = 0; col < 5; col++) {
+              if (board[row][col] === 'tiger') {
+                const tigerPosition: Position = { row, col };
+                const validMoves = getValidMoves(tigerPosition).filter(
+                  move => board[move.row][move.col] === null
+                );
+                const captureMoves = getCaptureMoves(tigerPosition, board, validMoves);
+
+                if (captureMoves.length > 0) {
+                  // Prioritize capture moves
+                  const captureMove = captureMoves[0];
+                  board[captureMove.to.row][captureMove.to.col] = 'tiger';
+                  board[tigerPosition.row][tigerPosition.col] = null;
+                  board[captureMove.capture.row][captureMove.capture.col] = null;
+
+                  return {
+                    ...prevState,
+                    board: board,
+                    currentPlayer: 'goat',
+                    aiThinking: false,
+                    capturedGoats: prevState.capturedGoats + 1,
+                    lastMove: {
+                      from: tigerPosition,
+                      to: captureMove.to,
+                      capture: captureMove.capture,
+                    },
+                  };
+                } else if (validMoves.length > 0) {
+                  // If no capture moves, make a regular move
+                  const move = validMoves[0];
+                  board[move.row][move.col] = 'tiger';
+                  board[tigerPosition.row][tigerPosition.col] = null;
+
+                  return {
+                    ...prevState,
+                    board: board,
+                    currentPlayer: 'goat',
+                    aiThinking: false,
+                    lastMove: {
+                      from: tigerPosition,
+                      to: move,
+                    },
+                  };
+                }
               }
             }
-          }
-          
-          // Randomly select an empty spot
-          if (emptySpots.length > 0) {
-            const randomSpot = emptySpots[Math.floor(Math.random() * emptySpots.length)];
-            newBoard[randomSpot.row][randomSpot.col] = 'goat';
-            
-            const newPlacedGoats = placedGoats + 1;
-            const newPhase: 'placing' | 'moving' = newPlacedGoats >= TOTAL_GOATS ? 'moving' : 'placing';
-            
-            const newState = {
-              ...prevState,
-              board: newBoard,
-              placedGoats: newPlacedGoats,
-              currentPlayer: 'tiger' as const,
-              aiThinking: false,
-              lastMove: { from: randomSpot, to: randomSpot },
-              phase: newPhase,
-            };
-            
-            // Check for winner
-            const winner = checkWinner(newState);
-            return winner ? { ...newState, winner } : newState;
           }
         } else {
-          // Find all pieces of the current player
-          const pieces: Position[] = [];
-          for (let r = 0; r < BOARD_SIZE; r++) {
-            for (let c = 0; c < BOARD_SIZE; c++) {
-              if (board[r][c] === currentPlayer) {
-                pieces.push({ row: r, col: c });
+          for (let row = 0; row < 5; row++) {
+            for (let col = 0; col < 5; col++) {
+              if (board[row][col] === 'goat') {
+                const goatPosition: Position = { row, col };
+                const validMoves = getValidMoves(goatPosition).filter(
+                  move => board[move.row][move.col] === null
+                );
+
+                if (validMoves.length > 0) {
+                  const move = validMoves[0];
+                  board[move.row][move.col] = 'goat';
+                  board[goatPosition.row][goatPosition.col] = null;
+
+                  return {
+                    ...prevState,
+                    board: board,
+                    currentPlayer: 'tiger',
+                    aiThinking: false,
+                    lastMove: {
+                      from: goatPosition,
+                      to: move,
+                    },
+                  };
+                }
               }
             }
           }
-          
-          // For each piece, find valid moves
-          const allMoves: { from: Position; to: Position; capture?: Position }[] = [];
-          
-          pieces.forEach(piece => {
-            const validMoves = getValidMoves(piece).filter(
-              move => board[move.row][move.col] === null
-            );
-            
-            validMoves.forEach(to => {
-              allMoves.push({ from: piece, to });
-            });
-            
-            // Add capture moves for tigers
-            if (currentPlayer === 'tiger') {
-              const captureMoves = getCaptureMoves(piece, board, validMoves);
-              captureMoves.forEach(move => {
-                allMoves.push({
-                  from: piece,
-                  to: move.to,
-                  capture: move.capture
-                });
-              });
+
+          // If no goat can move, try placing a goat
+          for (let row = 0; row < 5; row++) {
+            for (let col = 0; col < 5; col++) {
+              if (board[row][col] === null) {
+                board[row][col] = 'goat';
+                return {
+                  ...prevState,
+                  board: board,
+                  currentPlayer: 'tiger',
+                  aiThinking: false,
+                  placedGoats: prevState.placedGoats + 1,
+                  phase: prevState.placedGoats + 1 >= 20 ? 'moving' : 'placing',
+                  lastMove: {
+                    from: { row, col },
+                    to: { row, col },
+                  },
+                };
+              }
             }
-          });
-          
-          // Prioritize capture moves
-          const captureMoves = allMoves.filter(move => move.capture);
-          const movePool = captureMoves.length > 0 ? captureMoves : allMoves;
-          
-          if (movePool.length > 0) {
-            // Randomly select a move
-            move = movePool[Math.floor(Math.random() * movePool.length)];
-            
-            // Execute the move
-            newBoard[move.to.row][move.to.col] = board[move.from.row][move.from.col];
-            newBoard[move.from.row][move.from.col] = null;
-            
-            let capturedGoats = prevState.capturedGoats;
-            
-            // Handle capture
-            if (move.capture) {
-              newBoard[move.capture.row][move.capture.col] = null;
-              capturedGoats++;
-            }
-            
-            const newState = {
-              ...prevState,
-              board: newBoard,
-              currentPlayer: currentPlayer === 'tiger' ? ('goat' as const) : ('tiger' as const),
-              aiThinking: false,
-              capturedGoats,
-              lastMove: move,
-            };
-            
-            // Check for winner
-            const winner = checkWinner(newState);
-            return winner ? { ...newState, winner } : newState;
           }
         }
-        
-        // If no move could be made (shouldn't normally happen)
+
         return {
           ...prevState,
-          aiThinking: false
+          aiThinking: false,
+          turnStartTime: Date.now(), // Reset turn start time when AI makes a move
         };
       });
-    }, 500); // 500ms thinking time
+    }, 500);
   }, [setGameState]);
 
   return { makeAIMove };

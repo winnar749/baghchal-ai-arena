@@ -22,6 +22,9 @@ export type GameState = {
   lastMove: Move | null;
   winner: 'tiger' | 'goat' | null;
   aiThinking: boolean;
+  tigerTime: number; // Total time in seconds for tiger player
+  goatTime: number; // Total time in seconds for goat player
+  turnStartTime: number; // Timestamp when current turn started
 };
 
 export type IntersectionPoint = {

@@ -27,6 +27,7 @@ export function useGameActions(gameState: GameState, setGameState: React.Dispatc
             currentPlayer: 'tiger' as const,
             lastMove: { from: position, to: position },
             phase: newPlacedGoats >= TOTAL_GOATS ? 'moving' as const : 'placing' as const,
+            turnStartTime: Date.now(), // Reset turn start time when player changes
           };
         }
         return prevState;
@@ -92,6 +93,7 @@ export function useGameActions(gameState: GameState, setGameState: React.Dispatc
                 from: selectedPosition,
                 to: position,
               },
+              turnStartTime: Date.now(), // Reset turn start time when player changes
             };
             
             // Check if there's a winner after this move
@@ -116,6 +118,7 @@ export function useGameActions(gameState: GameState, setGameState: React.Dispatc
                 to: position,
                 capture: captureMove.capture,
               },
+              turnStartTime: Date.now(), // Reset turn start time when player changes
             };
             
             // Check if there's a winner after this move

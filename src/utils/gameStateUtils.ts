@@ -1,26 +1,24 @@
+import { GameState, PieceType } from '../types/game';
+import { INITIAL_BOARD } from './gameBoard';
 
-import { GameState } from '../types/game';
-import { createEmptyBoard, TOTAL_GOATS } from './gameBoard';
+// Initialize the game board
+export function initializeBoard(): PieceType[][] {
+  return INITIAL_BOARD.map(row => [...row]);
+}
 
-// Initialize a new game state
-export const createInitialGameState = (): GameState => {
-  const board = createEmptyBoard();
-  
-  // Place tigers at the corners
-  board[0][0] = 'tiger';
-  board[0][4] = 'tiger';
-  board[4][0] = 'tiger';
-  board[4][4] = 'tiger';
-  
+export function createInitialGameState(): GameState {
   return {
-    board,
-    currentPlayer: 'goat', // Start with goat
-    phase: 'placing', // Start with the goat placing phase
+    board: initializeBoard(),
+    currentPlayer: 'goat',
+    phase: 'placing',
     placedGoats: 0,
     capturedGoats: 0,
     selectedPosition: null,
     lastMove: null,
     winner: null,
     aiThinking: false,
+    tigerTime: 0,
+    goatTime: 0,
+    turnStartTime: Date.now(),
   };
-};
+}

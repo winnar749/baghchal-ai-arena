@@ -5,6 +5,7 @@ import { createInitialGameState } from '../utils/gameStateUtils';
 import { useGameActions } from './useGameActions';
 import { useAI } from './useAI';
 import { useValidMovesHelper } from './useValidMovesHelper';
+import { useGameTimer } from './useGameTimer';
 import { TOTAL_GOATS } from '../utils/gameBoard';
 
 export function useBaghchalGame() {
@@ -19,6 +20,7 @@ export function useBaghchalGame() {
   const { handleIntersectionClick } = useGameActions(gameState, setGameState);
   const { makeAIMove } = useAI(setGameState);
   const { getValidMovesForSelected } = useValidMovesHelper(gameState);
+  const { updateTurnStartTime } = useGameTimer(gameState, setGameState);
 
   return {
     gameState,
@@ -26,5 +28,6 @@ export function useBaghchalGame() {
     handleIntersectionClick,
     getValidMovesForSelected,
     makeAIMove,
+    updateTurnStartTime,
   };
 }

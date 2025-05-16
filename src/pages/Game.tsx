@@ -80,6 +80,8 @@ const Game: React.FC = () => {
                 gameMode={gameMode}
                 onModeChange={handleModeChange}
                 aiThinking={gameState.aiThinking}
+                tigerTime={gameState.tigerTime}
+                goatTime={gameState.goatTime}
               />
               
               <div className="bg-white dark:bg-black p-5 rounded-lg shadow-md border border-amber-100 dark:border-amber-800">

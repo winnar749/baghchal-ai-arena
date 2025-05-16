@@ -16,6 +16,8 @@ type GameControlsProps = {
   gameMode: GameMode;
   onModeChange: (mode: GameMode) => void;
   aiThinking: boolean;
+  tigerTime: number;
+  goatTime: number;
 };
 
 const GameControls: React.FC<GameControlsProps> = ({
@@ -27,17 +29,26 @@ const GameControls: React.FC<GameControlsProps> = ({
   onAIMove,
   gameMode,
   onModeChange,
-  aiThinking
+  aiThinking,
+  tigerTime,
+  goatTime
 }) => {
   const isHumanTurn = gameMode === 'human-vs-ai' && currentPlayer === 'goat';
   const isAITurn = (gameMode === 'human-vs-ai' && currentPlayer === 'tiger') || gameMode === 'ai-vs-ai';
 
+  // Format seconds to MM:SS
+  const formatTime = (seconds: number): string => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+  };
+
   return (
-    <div className="w-full bg-white rounded-lg shadow-md overflow-hidden">
+    <div className="w-full bg-white dark:bg-black rounded-lg shadow-md overflow-hidden border border-amber-100 dark:border-amber-800">
       {/* Player info */}
       <div className="grid grid-cols-2">
         <div 
-          className={`p-4 ${currentPlayer === 'goat' && !winner ? 'bg-blue-50 border-b-2 border-blue-500' : ''}`}
+          className={`p-4 ${currentPlayer === 'goat' && !winner ? 'bg-blue-50 dark:bg-blue-900/30 border-b-2 border-blue-500' : ''}`}
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
@@ -45,18 +56,19 @@ const GameControls: React.FC<GameControlsProps> = ({
                 <span className="text-xs">♟</span>
               </div>
               <div>
-                <p className="font-bold text-gray-800">Goats</p>
-                <p className="text-xs text-gray-500">Placed: {placedGoats}/20</p>
+                <p className="font-bold text-gray-800 dark:text-gray-200">Goats</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Placed: {placedGoats}/20</p>
               </div>
             </div>
-            <div className="bg-gray-100 px-2 py-1 rounded text-sm">
-              {capturedGoats}/5
+            <div className="flex items-center">
+              <Clock className="w-4 h-4 text-gray-400 dark:text-gray-500 mr-1" />
+              <span className="text-sm text-gray-600 dark:text-gray-300">{formatTime(goatTime)}</span>
             </div>
           </div>
         </div>
         
         <div 
-          className={`p-4 ${currentPlayer === 'tiger' && !winner ? 'bg-blue-50 border-b-2 border-blue-500' : ''}`}
+          className={`p-4 ${currentPlayer === 'tiger' && !winner ? 'bg-blue-50 dark:bg-blue-900/30 border-b-2 border-blue-500' : ''}`}
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
@@ -64,29 +76,29 @@ const GameControls: React.FC<GameControlsProps> = ({
                 <span className="text-xs">♚</span>
               </div>
               <div>
-                <p className="font-bold text-gray-800">Tigers</p>
-                <p className="text-xs text-gray-500">Need 5 captures</p>
+                <p className="font-bold text-gray-800 dark:text-gray-200">Tigers</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Need 5 captures</p>
               </div>
             </div>
             <div className="flex items-center">
-              <Clock className="w-4 h-4 text-gray-400 mr-1" />
-              <span className="text-sm text-gray-600">∞</span>
+              <Clock className="w-4 h-4 text-gray-400 dark:text-gray-500 mr-1" />
+              <span className="text-sm text-gray-600 dark:text-gray-300">{formatTime(tigerTime)}</span>
             </div>
           </div>
         </div>
       </div>
 
       {/* Game status */}
-      <div className="p-4 bg-gray-50 border-y border-gray-200">
+      <div className="p-4 bg-gray-50 dark:bg-gray-900 border-y border-gray-200 dark:border-gray-800">
         <div className="text-center">
-          <h3 className="text-lg font-bold mb-1">
+          <h3 className="text-lg font-bold mb-1 dark:text-white">
             {winner 
               ? `${winner === 'tiger' ? 'Tigers' : 'Goats'} win!` 
               : `Current Turn: ${currentPlayer === 'tiger' ? 'Tigers' : 'Goats'}`}
           </h3>
           
           {aiThinking && (
-            <p className="text-sm text-primary animate-pulse">AI is thinking...</p>
+            <p className="text-sm text-primary animate-pulse dark:text-amber-400">AI is thinking...</p>
           )}
         </div>
       </div>
@@ -94,9 +106,9 @@ const GameControls: React.FC<GameControlsProps> = ({
       {/* Game controls */}
       <div className="p-4 space-y-4">
         <div className="flex items-center justify-between">
-          <Label htmlFor="game-mode" className="text-sm font-medium">Game Mode:</Label>
+          <Label htmlFor="game-mode" className="text-sm font-medium dark:text-white">Game Mode:</Label>
           <div className="flex items-center space-x-4">
-            <Label htmlFor="human-vs-human" className={`text-xs cursor-pointer ${gameMode === 'human-vs-human' ? 'font-bold text-primary' : 'text-gray-500'}`}>
+            <Label htmlFor="human-vs-human" className={`text-xs cursor-pointer ${gameMode === 'human-vs-human' ? 'font-bold text-primary dark:text-amber-400' : 'text-gray-500 dark:text-gray-400'}`}>
               Human vs Human
             </Label>
             <Switch 
@@ -104,7 +116,7 @@ const GameControls: React.FC<GameControlsProps> = ({
               checked={gameMode !== 'human-vs-human'} 
               onCheckedChange={(checked) => onModeChange(checked ? 'human-vs-ai' : 'human-vs-human')}
             />
-            <Label htmlFor="human-vs-ai" className={`text-xs cursor-pointer ${gameMode === 'human-vs-ai' ? 'font-bold text-primary' : 'text-gray-500'}`}>
+            <Label htmlFor="human-vs-ai" className={`text-xs cursor-pointer ${gameMode === 'human-vs-ai' ? 'font-bold text-primary dark:text-amber-400' : 'text-gray-500 dark:text-gray-400'}`}>
               Human vs AI
             </Label>
           </div>
@@ -114,7 +126,7 @@ const GameControls: React.FC<GameControlsProps> = ({
           <Button 
             variant="outline" 
             onClick={onReset}
-            className="flex items-center space-x-1"
+            className="flex items-center space-x-1 dark:text-white dark:border-amber-700 dark:hover:bg-amber-900/30"
           >
             <RotateCcw className="w-4 h-4" />
             <span>New Game</span>
@@ -123,7 +135,7 @@ const GameControls: React.FC<GameControlsProps> = ({
           <Button 
             onClick={onAIMove}
             disabled={!isAITurn || aiThinking || !!winner}
-            className={isAITurn && !winner ? "bg-primary hover:bg-primary/90" : "bg-gray-300"}
+            className={isAITurn && !winner ? "bg-amber-500 hover:bg-amber-600 dark:bg-amber-600 dark:hover:bg-amber-700" : "bg-gray-300 dark:bg-gray-700"}
           >
             <Play className="w-4 h-4 mr-1" />
             {aiThinking ? "Thinking..." : "AI Move"}
