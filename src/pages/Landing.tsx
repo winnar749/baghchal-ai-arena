@@ -50,12 +50,12 @@ const Landing: React.FC = () => {
             </p>
           </div>
 
-          <div className="relative mx-auto">
-            <AspectRatio ratio={16/9} className="w-full max-w-3xl bg-white dark:bg-black rounded-lg shadow-xl overflow-hidden border border-amber-200 dark:border-amber-700">
-              <div className="absolute inset-0 grid place-items-center">
-                <div className="relative w-3/4 md:w-1/2 aspect-square">
+          <div className="flex justify-center w-full">
+            <AspectRatio ratio={1/1} className="w-full max-w-md bg-white dark:bg-black rounded-lg shadow-xl overflow-hidden border border-amber-200 dark:border-amber-700">
+              <div className="relative w-full h-full flex items-center justify-center">
+                <div className="relative w-full max-w-full aspect-square">
                   {/* Traditional Baghchal Board */}
-                  <div className="absolute w-full h-full bg-white dark:bg-black rounded-lg shadow-xl border border-amber-600/30 dark:border-amber-500/50">
+                  <div className="absolute w-full h-full bg-white dark:bg-black border border-amber-600/30 dark:border-amber-500/50">
                     {/* Background pattern for traditional look */}
                     <div className="absolute inset-0">
                       <div className="absolute inset-0 opacity-5 dark:opacity-10"></div>
