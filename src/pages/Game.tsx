@@ -1,6 +1,5 @@
 
 import React from 'react';
-import Header from '@/components/Header';
 import GameBoard from '@/components/GameBoard';
 import GameControls from '@/components/GameControls';
 import { useBaghchalGame } from '@/hooks/useBaghchalGame';
@@ -45,8 +44,6 @@ const Game: React.FC = () => {
   
   return (
     <div className="min-h-screen bg-white dark:bg-black flex flex-col">
-      <Header />
-      
       <div className="px-4 py-2 flex justify-end">
         <div className="flex items-center space-x-2">
           <button
@@ -147,13 +144,6 @@ const Game: React.FC = () => {
           </div>
         </div>
       </main>
-      
-      <footer className="py-4 px-6 text-center text-sm text-amber-100 bg-amber-900 dark:bg-amber-800">
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <p>Baghchal Game with Reinforcement Learning</p>
-          <p>&copy; {new Date().getFullYear()}</p>
-        </div>
-      </footer>
     </div>
   );
 };
