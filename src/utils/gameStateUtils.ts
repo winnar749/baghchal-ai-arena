@@ -1,24 +1,18 @@
 
-import { GameState, PieceType } from '../types/game';
-import { createEmptyBoard } from './gameBoard';
-
-// Define the initial board configuration with tigers at corners
-export const INITIAL_BOARD: PieceType[][] = [
-  ['tiger', null, null, null, 'tiger'],
-  [null, null, null, null, null],
-  [null, null, null, null, null],
-  [null, null, null, null, null],
-  ['tiger', null, null, null, 'tiger'],
-];
-
-// Initialize the game board
-export function initializeBoard(): PieceType[][] {
-  return INITIAL_BOARD.map(row => [...row]);
-}
+import { GameState } from '../types/game';
 
 export function createInitialGameState(): GameState {
+  // Create empty 5x5 board
+  const board = Array(5).fill(null).map(() => Array(5).fill(null));
+  
+  // Place tigers at the four corners
+  board[0][0] = 'tiger'; // top-left
+  board[0][4] = 'tiger'; // top-right
+  board[4][0] = 'tiger'; // bottom-left
+  board[4][4] = 'tiger'; // bottom-right
+  
   return {
-    board: initializeBoard(),
+    board,
     currentPlayer: 'goat',
     phase: 'placing',
     placedGoats: 0,

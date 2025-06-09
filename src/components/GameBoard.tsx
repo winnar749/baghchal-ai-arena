@@ -59,14 +59,40 @@ const GameBoard: React.FC<GameBoardProps> = ({
 
   return (
     <div 
-      className="relative mx-auto bg-amber-100 overflow-hidden"
-      style={{ width: boardSize, height: boardSize }}
+      className="relative mx-auto overflow-hidden border-8 border-amber-900 shadow-2xl"
+      style={{ 
+        width: boardSize, 
+        height: boardSize,
+        background: 'linear-gradient(135deg, #D2B48C 0%, #DEB887 25%, #D2B48C 50%, #F5DEB3 75%, #D2B48C 100%)',
+        backgroundSize: '20px 20px'
+      }}
     >
+      {/* Wood grain texture overlay */}
+      <div 
+        className="absolute inset-0 opacity-20"
+        style={{
+          backgroundImage: `repeating-linear-gradient(
+            90deg,
+            transparent,
+            transparent 2px,
+            rgba(139, 69, 19, 0.1) 2px,
+            rgba(139, 69, 19, 0.1) 4px
+          ),
+          repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 8px,
+            rgba(160, 82, 45, 0.1) 8px,
+            rgba(160, 82, 45, 0.1) 12px
+          )`
+        }}
+      />
+      
       {/* Horizontal lines */}
       {[0, 1, 2, 3, 4].map(row => (
         <div 
           key={`h-line-${row}`} 
-          className="absolute bg-amber-800 h-[2px] w-full" 
+          className="absolute bg-amber-900 h-[3px] w-full shadow-sm" 
           style={{ 
             top: row * cellSize,
             zIndex: 5
@@ -78,7 +104,7 @@ const GameBoard: React.FC<GameBoardProps> = ({
       {[0, 1, 2, 3, 4].map(col => (
         <div 
           key={`v-line-${col}`} 
-          className="absolute bg-amber-800 w-[2px] h-full" 
+          className="absolute bg-amber-900 w-[3px] h-full shadow-sm" 
           style={{ 
             left: col * cellSize,
             zIndex: 5
@@ -87,48 +113,48 @@ const GameBoard: React.FC<GameBoardProps> = ({
       ))}
       
       {/* Diagonal lines */}
-      <div className="absolute bg-amber-800 h-[2px] w-[141.4%] origin-center rotate-45" 
+      <div className="absolute bg-amber-900 h-[3px] w-[141.4%] origin-center rotate-45 shadow-sm" 
            style={{ top: '50%', left: '50%', transform: 'translate(-50%, -50%) rotate(45deg)', zIndex: 5 }} />
       
-      <div className="absolute bg-amber-800 h-[2px] w-[141.4%] origin-center -rotate-45" 
+      <div className="absolute bg-amber-900 h-[3px] w-[141.4%] origin-center -rotate-45 shadow-sm" 
            style={{ top: '50%', left: '50%', transform: 'translate(-50%, -50%) rotate(-45deg)', zIndex: 5 }} />
            
       {/* Corner to center diagonals */}
-      <div className="absolute bg-amber-800 h-[2px] w-[70.7%] origin-top-left rotate-45" 
+      <div className="absolute bg-amber-900 h-[3px] w-[70.7%] origin-top-left rotate-45 shadow-sm" 
            style={{ top: 0, left: 0, zIndex: 5 }} />
            
-      <div className="absolute bg-amber-800 h-[2px] w-[70.7%] origin-top-right -rotate-45" 
+      <div className="absolute bg-amber-900 h-[3px] w-[70.7%] origin-top-right -rotate-45 shadow-sm" 
            style={{ top: 0, right: 0, zIndex: 5 }} />
            
-      <div className="absolute bg-amber-800 h-[2px] w-[70.7%] origin-bottom-left -rotate-45" 
+      <div className="absolute bg-amber-900 h-[3px] w-[70.7%] origin-bottom-left -rotate-45 shadow-sm" 
            style={{ bottom: 0, left: 0, zIndex: 5 }} />
            
-      <div className="absolute bg-amber-800 h-[2px] w-[70.7%] origin-bottom-right rotate-45" 
+      <div className="absolute bg-amber-900 h-[3px] w-[70.7%] origin-bottom-right rotate-45 shadow-sm" 
            style={{ bottom: 0, right: 0, zIndex: 5 }} />
 
       {/* Edge to center diagonals */}
-      <div className="absolute bg-amber-800 h-[2px] w-[70.7%] origin-top-center rotate-45" 
+      <div className="absolute bg-amber-900 h-[3px] w-[70.7%] origin-top-center rotate-45 shadow-sm" 
            style={{ top: 0, left: '50%', transform: 'translateX(-50%) rotate(45deg)', transformOrigin: 'bottom', zIndex: 5, width: '70.7%' }} />
            
-      <div className="absolute bg-amber-800 h-[2px] w-[70.7%] origin-top-center -rotate-45" 
+      <div className="absolute bg-amber-900 h-[3px] w-[70.7%] origin-top-center -rotate-45 shadow-sm" 
            style={{ top: 0, left: '50%', transform: 'translateX(-50%) rotate(-45deg)', transformOrigin: 'bottom', zIndex: 5, width: '70.7%' }} />
            
-      <div className="absolute bg-amber-800 h-[2px] w-[70.7%] origin-left-middle rotate-45" 
+      <div className="absolute bg-amber-900 h-[3px] w-[70.7%] origin-left-middle rotate-45 shadow-sm" 
            style={{ top: '50%', left: 0, transform: 'translateY(-50%) rotate(45deg)', transformOrigin: 'left', zIndex: 5, width: '70.7%' }} />
            
-      <div className="absolute bg-amber-800 h-[2px] w-[70.7%] origin-left-middle -rotate-45" 
+      <div className="absolute bg-amber-900 h-[3px] w-[70.7%] origin-left-middle -rotate-45 shadow-sm" 
            style={{ top: '50%', left: 0, transform: 'translateY(-50%) rotate(-45deg)', transformOrigin: 'left', zIndex: 5, width: '70.7%' }} />
            
-      <div className="absolute bg-amber-800 h-[2px] w-[70.7%] origin-right-middle rotate-45" 
+      <div className="absolute bg-amber-900 h-[3px] w-[70.7%] origin-right-middle rotate-45 shadow-sm" 
            style={{ top: '50%', right: 0, transform: 'translateY(-50%) rotate(45deg)', transformOrigin: 'right', zIndex: 5, width: '70.7%' }} />
            
-      <div className="absolute bg-amber-800 h-[2px] w-[70.7%] origin-right-middle -rotate-45" 
+      <div className="absolute bg-amber-900 h-[3px] w-[70.7%] origin-right-middle -rotate-45 shadow-sm" 
            style={{ top: '50%', right: 0, transform: 'translateY(-50%) rotate(-45deg)', transformOrigin: 'right', zIndex: 5, width: '70.7%' }} />
            
-      <div className="absolute bg-amber-800 h-[2px] w-[70.7%] origin-bottom-center rotate-45" 
+      <div className="absolute bg-amber-900 h-[3px] w-[70.7%] origin-bottom-center rotate-45 shadow-sm" 
            style={{ bottom: 0, left: '50%', transform: 'translateX(-50%) rotate(45deg)', transformOrigin: 'top', zIndex: 5, width: '70.7%' }} />
            
-      <div className="absolute bg-amber-800 h-[2px] w-[70.7%] origin-bottom-center -rotate-45" 
+      <div className="absolute bg-amber-900 h-[3px] w-[70.7%] origin-bottom-center -rotate-45 shadow-sm" 
            style={{ bottom: 0, left: '50%', transform: 'translateX(-50%) rotate(-45deg)', transformOrigin: 'top', zIndex: 5, width: '70.7%' }} />
            
       {/* Intersection points */}
@@ -169,7 +195,7 @@ const GameBoard: React.FC<GameBoardProps> = ({
             
             {/* Intersection dot */}
             {!piece && (
-              <div className="absolute w-3 h-3 rounded-full bg-green-600" 
+              <div className="absolute w-4 h-4 rounded-full bg-amber-900 shadow-md border-2 border-amber-800" 
                    style={{ left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }} />
             )}
             
