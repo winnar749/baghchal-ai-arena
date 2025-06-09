@@ -1,7 +1,8 @@
+
 import { useState, useCallback } from 'react';
 import { GameState, Position, PieceType } from '../types/game';
 import { getValidMoves } from '../utils/gameBoard';
-import { getCaptureMoves } from '../utils/gameRules';
+import { getCaptureMoves, checkWinner } from '../utils/gameRules';
 
 export function useAI(setGameState: React.Dispatch<React.SetStateAction<GameState>>) {
   // Generate and execute AI move
@@ -52,10 +53,10 @@ export function useAI(setGameState: React.Dispatch<React.SetStateAction<GameStat
                   board[tigerPosition.row][tigerPosition.col] = null;
                   board[captureMove.capture.row][captureMove.capture.col] = null;
 
-                  return {
+                  const newState = {
                     ...prevState,
                     board: board,
-                    currentPlayer: 'goat',
+                    currentPlayer: 'goat' as const,
                     aiThinking: false,
                     capturedGoats: prevState.capturedGoats + 1,
                     lastMove: {
@@ -63,23 +64,33 @@ export function useAI(setGameState: React.Dispatch<React.SetStateAction<GameStat
                       to: captureMove.to,
                       capture: captureMove.capture,
                     },
+                    turnStartTime: Date.now(),
                   };
+
+                  // Check if there's a winner after this move
+                  const winner = checkWinner(newState);
+                  return winner ? { ...newState, winner } : newState;
                 } else if (validMoves.length > 0) {
                   // If no capture moves, make a regular move
                   const move = validMoves[0];
                   board[move.row][move.col] = 'tiger';
                   board[tigerPosition.row][tigerPosition.col] = null;
 
-                  return {
+                  const newState = {
                     ...prevState,
                     board: board,
-                    currentPlayer: 'goat',
+                    currentPlayer: 'goat' as const,
                     aiThinking: false,
                     lastMove: {
                       from: tigerPosition,
                       to: move,
                     },
+                    turnStartTime: Date.now(),
                   };
+
+                  // Check if there's a winner after this move
+                  const winner = checkWinner(newState);
+                  return winner ? { ...newState, winner } : newState;
                 }
               }
             }
@@ -98,16 +109,21 @@ export function useAI(setGameState: React.Dispatch<React.SetStateAction<GameStat
                   board[move.row][move.col] = 'goat';
                   board[goatPosition.row][goatPosition.col] = null;
 
-                  return {
+                  const newState = {
                     ...prevState,
                     board: board,
-                    currentPlayer: 'tiger',
+                    currentPlayer: 'tiger' as const,
                     aiThinking: false,
                     lastMove: {
                       from: goatPosition,
                       to: move,
                     },
+                    turnStartTime: Date.now(),
                   };
+
+                  // Check if there's a winner after this move
+                  const winner = checkWinner(newState);
+                  return winner ? { ...newState, winner } : newState;
                 }
               }
             }
@@ -118,18 +134,23 @@ export function useAI(setGameState: React.Dispatch<React.SetStateAction<GameStat
             for (let col = 0; col < 5; col++) {
               if (board[row][col] === null) {
                 board[row][col] = 'goat';
-                return {
+                const newState = {
                   ...prevState,
                   board: board,
-                  currentPlayer: 'tiger',
+                  currentPlayer: 'tiger' as const,
                   aiThinking: false,
                   placedGoats: prevState.placedGoats + 1,
-                  phase: prevState.placedGoats + 1 >= 20 ? 'moving' : 'placing',
+                  phase: prevState.placedGoats + 1 >= 20 ? 'moving' as const : 'placing' as const,
                   lastMove: {
                     from: { row, col },
                     to: { row, col },
                   },
+                  turnStartTime: Date.now(),
                 };
+
+                // Check if there's a winner after this move
+                const winner = checkWinner(newState);
+                return winner ? { ...newState, winner } : newState;
               }
             }
           }
