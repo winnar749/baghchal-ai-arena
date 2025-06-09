@@ -11,31 +11,27 @@ type GamePieceProps = {
 const GamePiece: React.FC<GamePieceProps> = ({ type, isSelected = false, className = '' }) => {
   if (!type) return null;
   
-  const baseClasses = "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full shadow-md transition-all duration-200 transform cursor-pointer";
-  const sizeClasses = "w-8 h-8 md:w-10 md:h-10";
+  const baseClasses = "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full shadow-lg transition-all duration-200 transform cursor-pointer font-bold text-white flex items-center justify-center";
+  const sizeClasses = "w-12 h-12 md:w-14 md:h-14";
   
   let pieceClasses = '';
+  let content = '';
   
   if (type === 'tiger') {
-    pieceClasses = "bg-gradient-to-br from-amber-500 to-orange-600 dark:from-amber-400 dark:to-orange-500 text-white grid place-items-center font-bold border-2 border-amber-300 dark:border-amber-200";
+    pieceClasses = "bg-orange-500 border-2 border-orange-400";
+    content = 'T';
   } else if (type === 'goat') {
-    pieceClasses = "bg-gradient-to-br from-slate-700 to-slate-900 dark:from-slate-600 dark:to-slate-800 text-white grid place-items-center border-2 border-slate-400 dark:border-slate-300";
+    pieceClasses = "bg-blue-500 border-2 border-blue-400";
+    content = 'G';
   }
   
-  const selectedClasses = isSelected ? "ring-4 ring-yellow-300 dark:ring-yellow-200 animate-piece-bounce" : "";
+  const selectedClasses = isSelected ? "ring-4 ring-yellow-300 animate-pulse scale-110" : "";
   
   return (
     <div className={`${baseClasses} ${sizeClasses} ${pieceClasses} ${selectedClasses} ${className}`}>
-      {type === 'tiger' && (
-        <span className="text-xs md:text-sm flex items-center justify-center">
-          🐯
-        </span>
-      )}
-      {type === 'goat' && (
-        <span className="text-xs md:text-sm flex items-center justify-center">
-          🐐
-        </span>
-      )}
+      <span className="text-lg md:text-xl font-bold">
+        {content}
+      </span>
     </div>
   );
 };

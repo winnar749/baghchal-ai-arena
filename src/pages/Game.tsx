@@ -43,96 +43,148 @@ const Game: React.FC = () => {
   };
   
   return (
-    <div className="min-h-screen bg-white dark:bg-black flex flex-col">
-      <div className="px-4 py-2 flex justify-end">
+    <div className="min-h-screen bg-neutral-900 text-white">
+      {/* Header */}
+      <header className="flex items-center justify-between px-8 py-4 border-b border-neutral-700">
         <div className="flex items-center space-x-2">
+          <h1 className="text-2xl font-bold text-orange-400">BaghChal</h1>
+          <span className="text-sm bg-neutral-700 px-2 py-1 rounded">AI</span>
+        </div>
+        
+        <nav className="flex items-center space-x-8">
+          <a href="#" className="text-neutral-300 hover:text-white">Home</a>
+          <a href="#" className="text-white font-medium">Play</a>
+          <a href="#" className="text-neutral-300 hover:text-white">Learn</a>
+          <a href="#" className="text-neutral-300 hover:text-white">About</a>
+        </nav>
+        
+        <div className="flex items-center space-x-4">
           <button
-            onClick={() => setTheme('light')}
-            className={`p-2 rounded-md ${theme === 'light' ? 'bg-white text-amber-900 shadow' : 'bg-black text-amber-600'}`}
-            aria-label="Use light theme"
-          >
-            ☀️
-          </button>
-          <button
-            onClick={() => setTheme('dark')}
-            className={`p-2 rounded-md ${theme === 'dark' ? 'bg-black text-amber-300 shadow' : 'bg-white text-amber-600'}`}
-            aria-label="Use dark theme"
+            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            className="p-2 rounded-lg bg-neutral-700 hover:bg-neutral-600"
+            aria-label="Toggle theme"
           >
             🌙
           </button>
+          <button className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-lg font-medium">
+            Play Now
+          </button>
+        </div>
+      </header>
+
+      {/* Game Mode Toggle */}
+      <div className="flex justify-center py-6">
+        <div className="flex items-center bg-neutral-800 rounded-full p-1">
+          <button
+            onClick={() => handleModeChange('human-vs-human')}
+            className={`flex items-center space-x-2 px-4 py-2 rounded-full transition-colors ${
+              gameMode === 'human-vs-human' 
+                ? 'bg-neutral-600 text-white' 
+                : 'text-neutral-400 hover:text-white'
+            }`}
+          >
+            <span>👤</span>
+            <span>Human vs Human</span>
+          </button>
+          <button
+            onClick={() => handleModeChange('human-vs-ai')}
+            className={`flex items-center space-x-2 px-4 py-2 rounded-full transition-colors ${
+              gameMode === 'human-vs-ai' 
+                ? 'bg-orange-500 text-white' 
+                : 'text-neutral-400 hover:text-white'
+            }`}
+          >
+            <span>👤</span>
+            <span>Human vs AI</span>
+          </button>
         </div>
       </div>
-      
-      <main className="flex-1 py-8 px-4 bg-white dark:bg-black">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid gap-8 md:grid-cols-2 items-start">
-            <div className="order-2 md:order-1 space-y-6">
-              <GameControls 
-                currentPlayer={gameState.currentPlayer}
-                placedGoats={gameState.placedGoats}
-                capturedGoats={gameState.capturedGoats}
-                winner={gameState.winner}
-                onReset={resetGame}
-                onAIMove={makeAIMove}
-                gameMode={gameMode}
-                onModeChange={handleModeChange}
-                aiThinking={gameState.aiThinking}
-                tigerTime={gameState.tigerTime}
-                goatTime={gameState.goatTime}
-              />
-              
-              <div className="bg-white dark:bg-black p-5 rounded-lg shadow-md border border-amber-100 dark:border-amber-800">
-                <h3 className="text-lg font-semibold mb-3 flex items-center">
-                  <div className="h-5 w-1 bg-amber-500 dark:bg-amber-400 mr-2"></div>
-                  Game Status
-                </h3>
-                
-                {gameState.phase === 'placing' && gameState.currentPlayer === 'goat' && (
-                  <div className="p-3 bg-blue-50 dark:bg-blue-900/30 rounded-md text-sm border-l-4 border-blue-500">
-                    <p className="font-medium dark:text-white">Goat placement phase</p>
-                    <p className="text-xs text-gray-600 dark:text-gray-300 mt-1">Place your goat on any empty intersection</p>
+
+      {/* Main Game Area */}
+      <div className="flex justify-center px-8 pb-8">
+        <div className="flex gap-8 max-w-7xl w-full">
+          {/* Left Sidebar */}
+          <div className="w-80 space-y-6">
+            {/* AI Info */}
+            <div className="bg-neutral-800 rounded-lg p-6">
+              <h3 className="text-lg font-semibold mb-4">AI (dqn)</h3>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-3 h-3 rounded-full bg-orange-500"></div>
+                    <span>Tigers</span>
                   </div>
-                )}
-                
-                {gameState.selectedPosition && (
-                  <div className="p-3 bg-green-50 dark:bg-green-900/30 rounded-md text-sm border-l-4 border-green-500 mt-3">
-                    <p className="font-medium dark:text-white">Piece selected!</p>
-                    <p className="text-xs text-gray-600 dark:text-gray-300 mt-1">Click on a highlighted point to move</p>
+                  <span className="text-neutral-400">⏱ {Math.floor(gameState.tigerTime / 60)}:{(gameState.tigerTime % 60).toString().padStart(2, '0')}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+                    <span>Goats</span>
                   </div>
-                )}
-                
-                {gameState.winner && (
-                  <div className="p-3 bg-amber-50 dark:bg-amber-900/30 rounded-md text-sm border-l-4 border-amber-500 mt-3">
-                    <p className="font-medium text-center dark:text-white">
-                      {gameState.winner === 'tiger' ? '🐯 Tigers win!' : '🐐 Goats win!'}
-                    </p>
-                    <p className="text-xs text-gray-600 dark:text-gray-300 mt-1 text-center">
-                      {gameState.winner === 'tiger' 
-                        ? 'Tigers captured 5 goats!' 
-                        : 'Tigers have no valid moves left!'}
-                    </p>
-                  </div>
-                )}
-              </div>
-              
-              <div className="bg-white dark:bg-black p-5 rounded-lg shadow-md border border-amber-100 dark:border-amber-800">
-                <h3 className="text-lg font-semibold mb-3 flex items-center">
-                  <div className="h-5 w-1 bg-amber-500 dark:bg-amber-400 mr-2"></div>
-                  Reinforcement Learning
-                </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-300">
-                  This implementation will integrate reinforcement learning to develop intelligent playing strategies.
-                </p>
-                <div className="mt-4 h-24 bg-white dark:bg-black rounded-md flex items-center justify-center border border-amber-200 dark:border-amber-700">
-                  <div className="text-center">
-                    <p className="text-amber-500 dark:text-amber-400 text-sm">RL visualization</p>
-                    <p className="text-xs text-amber-400 dark:text-amber-300 mt-1">Coming soon</p>
-                  </div>
+                  <span className="text-neutral-400">⏱ {Math.floor(gameState.goatTime / 60)}:{(gameState.goatTime % 60).toString().padStart(2, '0')}</span>
                 </div>
               </div>
             </div>
-            
-            <div className="order-1 md:order-2 flex justify-center p-6 bg-white dark:bg-black rounded-lg shadow-md border border-amber-100 dark:border-amber-800">
+
+            {/* Game Status */}
+            <div className="bg-neutral-800 rounded-lg p-6">
+              <h3 className="text-lg font-semibold mb-2">
+                {gameState.phase === 'placing' ? 'Goats Turn - Placement' : `${gameState.currentPlayer === 'tiger' ? 'Tigers' : 'Goats'} Turn`}
+              </h3>
+              <p className="text-neutral-400 text-sm">
+                ({gameState.placedGoats}/20)
+              </p>
+            </div>
+
+            {/* Game Statistics */}
+            <div className="bg-neutral-800 rounded-lg p-6">
+              <h3 className="text-lg font-semibold mb-4">Game Statistics</h3>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-neutral-400">Goats Placed:</span>
+                  <span>{gameState.placedGoats}/20</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-neutral-400">Goats Captured:</span>
+                  <span>{gameState.capturedGoats}/5</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-neutral-400">Phase:</span>
+                  <span>{gameState.phase}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-neutral-400">Moves Made:</span>
+                  <span>0</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Control Buttons */}
+            <div className="grid grid-cols-2 gap-3">
+              <button className="bg-neutral-700 hover:bg-neutral-600 text-white px-4 py-2 rounded-lg">
+                Undo
+              </button>
+              <button className="bg-neutral-700 hover:bg-neutral-600 text-white px-4 py-2 rounded-lg">
+                Pause
+              </button>
+              <button className="bg-neutral-700 hover:bg-neutral-600 text-white px-4 py-2 rounded-lg">
+                Settings
+              </button>
+              <button 
+                onClick={resetGame}
+                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg"
+              >
+                Reset
+              </button>
+              <button className="bg-neutral-700 hover:bg-neutral-600 text-white px-4 py-2 rounded-lg">
+                Share
+              </button>
+            </div>
+          </div>
+
+          {/* Game Board */}
+          <div className="flex-1 flex justify-center items-center">
+            <div className="bg-amber-100 p-8 rounded-lg">
               <GameBoard 
                 board={gameState.board}
                 selectedPosition={gameState.selectedPosition}
@@ -143,7 +195,7 @@ const Game: React.FC = () => {
             </div>
           </div>
         </div>
-      </main>
+      </div>
     </div>
   );
 };
