@@ -1,4 +1,3 @@
-
 import React, { useMemo } from 'react';
 import GamePiece from './GamePiece';
 import { Position, PieceType } from '../types/game';
@@ -20,7 +19,7 @@ const GameBoard: React.FC<GameBoardProps> = ({
   onIntersectionClick 
 }) => {
   const isMobile = useIsMobile();
-  const boardSize = isMobile ? 320 : 500;
+  const boardSize = isMobile ? 280 : 400; // Reduced from 320/500 to 280/400
   const cellSize = boardSize / 4; // 5 intersections means 4 cells
   
   // Generate all intersection points
@@ -59,7 +58,7 @@ const GameBoard: React.FC<GameBoardProps> = ({
 
   return (
     <div 
-      className="relative mx-auto bg-amber-100 overflow-hidden"
+      className="relative mx-auto bg-amber-50 border border-amber-200 overflow-hidden shadow-lg"
       style={{ width: boardSize, height: boardSize }}
     >
       {/* Horizontal lines */}
@@ -157,19 +156,19 @@ const GameBoard: React.FC<GameBoardProps> = ({
           >
             {/* Highlight for last move */}
             {isHighlighted && (
-              <div className="absolute w-8 h-8 bg-yellow-300/40 rounded-full" 
+              <div className="absolute w-6 h-6 bg-yellow-300/40 rounded-full" 
                 style={{ left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }} />
             )}
             
             {/* Highlight for valid move */}
             {isValidMove && !piece && (
-              <div className="absolute w-6 h-6 bg-green-400 rounded-full animate-pulse" 
+              <div className="absolute w-4 h-4 bg-green-400 rounded-full animate-pulse" 
                 style={{ left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }} />
             )}
             
             {/* Intersection dot */}
             {!piece && (
-              <div className="absolute w-3 h-3 rounded-full bg-green-600" 
+              <div className="absolute w-2 h-2 rounded-full bg-amber-700" 
                    style={{ left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }} />
             )}
             
