@@ -19,7 +19,7 @@ export const getValidMoves = (position: Position): Position[] => {
   const { row, col } = position;
   const moves: Position[] = [];
 
-  // Horizontal and vertical moves
+  // Horizontal and vertical moves (always valid)
   const directions = [
     { row: -1, col: 0 }, // up
     { row: 1, col: 0 },  // down
@@ -27,13 +27,15 @@ export const getValidMoves = (position: Position): Position[] => {
     { row: 0, col: 1 },  // right
   ];
 
-  // Add diagonal moves for positions where diagonals exist
+  // Diagonal moves based on position and board layout
+  const diagonalMoves: { row: number; col: number }[] = [];
+
+  // Corner positions - can move diagonally in all directions
   if ((row === 0 && col === 0) || 
       (row === 0 && col === 4) || 
       (row === 4 && col === 0) || 
-      (row === 4 && col === 4) || 
-      (row === 2 && col === 2)) {
-    directions.push(
+      (row === 4 && col === 4)) {
+    diagonalMoves.push(
       { row: -1, col: -1 }, // up-left
       { row: -1, col: 1 },  // up-right
       { row: 1, col: -1 },  // down-left
@@ -41,26 +43,34 @@ export const getValidMoves = (position: Position): Position[] => {
     );
   }
   
-  // Add diagonal moves for middle positions on the edge
-  if ((row === 0 && col === 2) || 
-      (row === 2 && col === 0) || 
-      (row === 2 && col === 4) || 
-      (row === 4 && col === 2)) {
-    if (row === 0 && col === 2) {
-      directions.push({ row: 1, col: -1 }, { row: 1, col: 1 });
-    }
-    if (row === 2 && col === 0) {
-      directions.push({ row: -1, col: 1 }, { row: 1, col: 1 });
-    }
-    if (row === 2 && col === 4) {
-      directions.push({ row: -1, col: -1 }, { row: 1, col: -1 });
-    }
-    if (row === 4 && col === 2) {
-      directions.push({ row: -1, col: -1 }, { row: -1, col: 1 });
-    }
+  // Center position - can move diagonally in all directions
+  if (row === 2 && col === 2) {
+    diagonalMoves.push(
+      { row: -1, col: -1 }, // up-left
+      { row: -1, col: 1 },  // up-right
+      { row: 1, col: -1 },  // down-left
+      { row: 1, col: 1 },   // down-right
+    );
+  }
+  
+  // Middle edge positions - can move diagonally towards center
+  if (row === 0 && col === 2) { // top middle
+    diagonalMoves.push({ row: 1, col: -1 }, { row: 1, col: 1 });
+  }
+  if (row === 2 && col === 0) { // left middle
+    diagonalMoves.push({ row: -1, col: 1 }, { row: 1, col: 1 });
+  }
+  if (row === 2 && col === 4) { // right middle
+    diagonalMoves.push({ row: -1, col: -1 }, { row: 1, col: -1 });
+  }
+  if (row === 4 && col === 2) { // bottom middle
+    diagonalMoves.push({ row: -1, col: -1 }, { row: -1, col: 1 });
   }
 
-  for (const dir of directions) {
+  // Add all valid directions
+  const allDirections = [...directions, ...diagonalMoves];
+
+  for (const dir of allDirections) {
     const newRow = row + dir.row;
     const newCol = col + dir.col;
     if (newRow >= 0 && newRow < BOARD_SIZE && newCol >= 0 && newCol < BOARD_SIZE) {

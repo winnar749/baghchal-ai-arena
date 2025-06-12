@@ -12,38 +12,39 @@ export const getCaptureMoves = (
   
   // A tiger can jump over a goat to an empty space (in a straight line)
   if (board[position.row][position.col] === 'tiger') {
-    for (const dir of [
-      { row: -2, col: 0, captureRow: -1, captureCol: 0 },    // up
-      { row: 2, col: 0, captureRow: 1, captureCol: 0 },     // down
-      { row: 0, col: -2, captureRow: 0, captureCol: -1 },   // left
-      { row: 0, col: 2, captureRow: 0, captureCol: 1 },     // right
-      { row: -2, col: -2, captureRow: -1, captureCol: -1 }, // up-left
-      { row: -2, col: 2, captureRow: -1, captureCol: 1 },   // up-right
-      { row: 2, col: -2, captureRow: 1, captureCol: -1 },   // down-left
-      { row: 2, col: 2, captureRow: 1, captureCol: 1 },     // down-right
-    ]) {
-      const newRow = position.row + dir.row;
-      const newCol = position.col + dir.col;
-      const captureRow = position.row + dir.captureRow;
-      const captureCol = position.col + dir.captureCol;
-      
-      // Check if the move is valid (within bounds)
-      if (newRow >= 0 && newRow < BOARD_SIZE && newCol >= 0 && newCol < BOARD_SIZE) {
-        // Check if the capture is along a valid path (some diagonals aren't allowed)
-        const isValidPath = getValidMoves({ row: position.row, col: position.col }).some(
-          move => move.row === captureRow && move.col === captureCol
-        ) && getValidMoves({ row: captureRow, col: captureCol }).some(
-          move => move.row === newRow && move.col === newCol
-        );
+    // Get all valid single moves from current position
+    const adjacentMoves = getValidMoves(position);
+    
+    for (const adjacentMove of adjacentMoves) {
+      // Check if there's a goat at the adjacent position
+      if (board[adjacentMove.row][adjacentMove.col] === 'goat') {
+        // Calculate the direction vector
+        const dirRow = adjacentMove.row - position.row;
+        const dirCol = adjacentMove.col - position.col;
         
-        // Check if there's a goat to capture and an empty spot to land
-        if (isValidPath && 
-            board[captureRow][captureCol] === 'goat' && 
-            board[newRow][newCol] === null) {
-          captureMoves.push({
-            to: { row: newRow, col: newCol },
-            capture: { row: captureRow, col: captureCol },
-          });
+        // Calculate landing position (2 steps in same direction)
+        const landingRow = position.row + (dirRow * 2);
+        const landingCol = position.col + (dirCol * 2);
+        
+        // Check if landing position is within bounds
+        if (landingRow >= 0 && landingRow < BOARD_SIZE && 
+            landingCol >= 0 && landingCol < BOARD_SIZE) {
+          
+          // Check if the landing position is empty
+          if (board[landingRow][landingCol] === null) {
+            // Verify that the landing position is a valid move from the goat's position
+            const validFromGoat = getValidMoves(adjacentMove);
+            const isValidLanding = validFromGoat.some(
+              move => move.row === landingRow && move.col === landingCol
+            );
+            
+            if (isValidLanding) {
+              captureMoves.push({
+                to: { row: landingRow, col: landingCol },
+                capture: { row: adjacentMove.row, col: adjacentMove.col },
+              });
+            }
+          }
         }
       }
     }
